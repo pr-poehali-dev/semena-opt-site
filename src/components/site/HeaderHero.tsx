@@ -20,7 +20,7 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
             </div>
             <div className="leading-tight">
               <div className="font-display text-xl font-semibold">Семена Оптом</div>
-              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">с 2009 года</div>
+              <div className="text-[10px] uppercase tracking-wide text-muted-foreground max-w-[260px]">магазин для юридических лиц и индивидуальных предпринимателей</div>
             </div>
           </div>
           <nav className="hidden lg:flex items-center gap-1">

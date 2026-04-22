@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -35,10 +36,18 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
               </button>
             ))}
           </nav>
-          <Button className="bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white rounded-full">
-            <Icon name="Phone" size={16} />
-            Связаться
-          </Button>
+          <div className="flex items-center gap-2">
+            <Link to="/faq" className="hidden md:block">
+              <Button variant="ghost" className="rounded-full">
+                <Icon name="HelpCircle" size={16} />
+                FAQ
+              </Button>
+            </Link>
+            <Button className="bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white rounded-full">
+              <Icon name="Phone" size={16} />
+              Связаться
+            </Button>
+          </div>
         </div>
       </header>
 

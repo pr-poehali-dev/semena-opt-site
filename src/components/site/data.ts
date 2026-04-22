@@ -1,5 +1,6 @@
 export const CONTACT_API_URL = 'https://functions.poehali.dev/73b03e72-4f94-4e18-b16d-abe7f9ea7bb0';
 export const NEWS_API_URL = 'https://functions.poehali.dev/aef555b4-f74a-4447-9294-470c7ea276e9';
+export const ARCHIVE_API_URL = 'https://functions.poehali.dev/aef555b4-f74a-4447-9294-470c7ea276e9?kind=archive';
 export const CATALOG_API_URL = 'https://functions.poehali.dev/9eabe422-fd0a-4167-afb7-acc6cf903f76';
 export const PRICES_API_URL = 'https://functions.poehali.dev/e8b0609f-fa31-42bd-bba6-84527f2c03fb';
 

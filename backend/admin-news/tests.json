@@ -18,6 +18,12 @@
       "path": "/",
       "body": {"title": "test"},
       "expectedStatus": 401
+    },
+    {
+      "name": "Получить архив",
+      "method": "GET",
+      "path": "/?kind=archive",
+      "expectedStatus": 200
     }
   ]
 }

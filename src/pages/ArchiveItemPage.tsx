@@ -1,11 +1,23 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { archive } from '@/components/site/data';
+import { archive as archiveFallback, ARCHIVE_API_URL } from '@/components/site/data';
+
+interface ArchiveItem { slug: string; date: string; title: string; content?: string[]; image?: string }
 
 const ArchiveItemPage = () => {
   const { slug } = useParams();
+  const [archive, setArchive] = useState<ArchiveItem[]>(archiveFallback);
+
+  useEffect(() => {
+    fetch(ARCHIVE_API_URL)
+      .then((r) => r.json())
+      .then((d) => { if (d.items?.length) setArchive(d.items); })
+      .catch(() => {});
+  }, []);
+
   const item = archive.find((a) => a.slug === slug);
 
   return (
@@ -58,6 +70,12 @@ const ArchiveItemPage = () => {
 
               <h1 className="font-display text-4xl lg:text-6xl leading-[1] mb-10">{item.title}</h1>
 
+              {item.image && (
+                <div className="aspect-[16/9] rounded-3xl overflow-hidden mb-10">
+                  <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                </div>
+              )}
+
               <div className="space-y-6">
                 {item.content?.map((p, i) => (
                   <p key={i} className="text-lg leading-relaxed">{p}</p>
@@ -89,13 +107,20 @@ const ArchiveItemPage = () => {
                       <Link
                         key={a.slug}
                         to={`/archive/${a.slug}`}
-                        className="block py-4 group first:pt-0 last:pb-0"
+                        className="flex gap-3 py-4 group first:pt-0 last:pb-0"
                       >
-                        <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{a.date}</div>
-                        <div className="font-display text-base leading-snug group-hover:text-[hsl(var(--forest))] transition-colors flex items-start justify-between gap-3">
-                          <span>{a.title}</span>
-                          <Icon name="ArrowUpRight" size={14} className="opacity-40 group-hover:opacity-100 transition-opacity mt-1 shrink-0" />
+                        {a.image && (
+                          <div className="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-border/60">
+                            <img src={a.image} alt={a.title} className="w-full h-full object-cover" />
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{a.date}</div>
+                          <div className="font-display text-sm leading-snug group-hover:text-[hsl(var(--forest))] transition-colors">
+                            {a.title}
+                          </div>
                         </div>
+                        <Icon name="ArrowUpRight" size={14} className="opacity-40 group-hover:opacity-100 transition-opacity mt-1 shrink-0" />
                       </Link>
                     ))}
                 </div>

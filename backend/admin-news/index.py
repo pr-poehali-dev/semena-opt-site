@@ -15,14 +15,35 @@ CORS_HEADERS = {
 
 
 def handler(event, context):
-    """CRUD для новостей: GET — список (публичный), POST/PUT/DELETE — для админа."""
+    """CRUD для новостей и архива. ?kind=archive — работа с архивом, иначе — новости."""
     method = event.get('httpMethod', 'GET')
     if method == 'OPTIONS':
         return {'statusCode': 200, 'headers': CORS_HEADERS, 'body': ''}
 
+    qs = event.get('queryStringParameters') or {}
+    kind = qs.get('kind', 'news') if qs else 'news'
+    if kind not in ('news', 'archive'):
+        kind = 'news'
+
     conn = psycopg2.connect(os.environ['DATABASE_URL'])
     try:
         if method == 'GET':
+            if kind == 'archive':
+                with conn.cursor() as cur:
+                    cur.execute(
+                        "SELECT id, slug, date_label, title, content, image, sort_order FROM archive ORDER BY sort_order, id"
+                    )
+                    rows = cur.fetchall()
+                data = [
+                    {
+                        'id': r[0], 'slug': r[1], 'date': r[2], 'title': r[3],
+                        'content': [p for p in (r[4] or '').split('\n\n') if p.strip()],
+                        'image': r[5], 'sort': r[6],
+                    }
+                    for r in rows
+                ]
+                return _json(200, {'items': data})
+
             with conn.cursor() as cur:
                 cur.execute(
                     "SELECT id, slug, date_label, tag, title, text, content, image, published FROM news ORDER BY id DESC"
@@ -43,10 +64,24 @@ def handler(event, context):
             return _json(401, {'error': 'unauthorized'})
 
         body = json.loads(event.get('body') or '{}')
-        image_url = _resolve_img(body)
+        image_url = _resolve_img(body, kind)
 
         if method == 'POST':
             slug = body.get('slug') or _slugify(body.get('title', ''))
+            if kind == 'archive':
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """INSERT INTO archive (slug, date_label, title, content, image, sort_order)
+                           VALUES (%s, %s, %s, %s, %s, %s) RETURNING id""",
+                        (
+                            slug, body.get('date', ''), body.get('title', ''),
+                            body.get('content', ''), image_url, int(body.get('sort') or 0),
+                        ),
+                    )
+                    new_id = cur.fetchone()[0]
+                    conn.commit()
+                return _json(200, {'id': new_id, 'image': image_url})
+
             with conn.cursor() as cur:
                 cur.execute(
                     """INSERT INTO news (slug, date_label, tag, title, text, content, image, published)
@@ -65,6 +100,20 @@ def handler(event, context):
             item_id = body.get('id')
             if not item_id:
                 return _json(400, {'error': 'id required'})
+            if kind == 'archive':
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """UPDATE archive SET slug=%s, date_label=%s, title=%s, content=%s,
+                           image=%s, sort_order=%s WHERE id=%s""",
+                        (
+                            body.get('slug', ''), body.get('date', ''), body.get('title', ''),
+                            body.get('content', ''), image_url, int(body.get('sort') or 0),
+                            int(item_id),
+                        ),
+                    )
+                    conn.commit()
+                return _json(200, {'ok': True, 'image': image_url})
+
             with conn.cursor() as cur:
                 cur.execute(
                     """UPDATE news SET slug=%s, date_label=%s, tag=%s, title=%s, text=%s,
@@ -80,11 +129,12 @@ def handler(event, context):
             return _json(200, {'ok': True, 'image': image_url})
 
         if method == 'DELETE':
-            item_id = body.get('id') or (event.get('queryStringParameters') or {}).get('id')
+            item_id = body.get('id') or (qs.get('id') if qs else None)
             if not item_id:
                 return _json(400, {'error': 'id required'})
+            table = 'archive' if kind == 'archive' else 'news'
             with conn.cursor() as cur:
-                cur.execute("DELETE FROM news WHERE id=%s", (int(item_id),))
+                cur.execute(f"DELETE FROM {table} WHERE id=%s", (int(item_id),))
                 conn.commit()
             return _json(200, {'ok': True})
 
@@ -93,12 +143,12 @@ def handler(event, context):
         conn.close()
 
 
-def _resolve_img(body):
+def _resolve_img(body, kind):
     img_b64 = body.get('imageBase64')
     if img_b64:
-        filename = body.get('imageFilename') or 'news.jpg'
+        filename = body.get('imageFilename') or f'{kind}.jpg'
         safe_name = re.sub(r'[^A-Za-z0-9._-]+', '_', filename)
-        key = f'news/{int(datetime.utcnow().timestamp())}_{safe_name}'
+        key = f'{kind}/{int(datetime.utcnow().timestamp())}_{safe_name}'
         raw = base64.b64decode(img_b64)
         ctype = body.get('imageContentType') or _guess_ct(safe_name)
         s3 = boto3.client(

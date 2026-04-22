@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
 
-const CONTACT_API_URL = '';
+const CONTACT_API_URL = 'https://functions.poehali.dev/73b03e72-4f94-4e18-b16d-abe7f9ea7bb0';
 
 const nav = [
   { id: 'news', label: 'Новости' },

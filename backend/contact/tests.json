@@ -1,0 +1,51 @@
+{
+  "tests": [
+    {
+      "name": "Успешная отправка заявки",
+      "method": "POST",
+      "path": "/",
+      "headers": {"Content-Type": "application/json"},
+      "body": {
+        "name": "Иван Иванов",
+        "phone": "+7 900 123 45 67",
+        "email": "ivan@example.com",
+        "message": "Интересует оптовая партия подсолнечника"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {"success": true},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Ошибка при пустом имени",
+      "method": "POST",
+      "path": "/",
+      "headers": {"Content-Type": "application/json"},
+      "body": {
+        "name": "",
+        "phone": "+7 900 123 45 67",
+        "email": "ivan@example.com",
+        "message": "тест"
+      },
+      "expectedStatus": 400
+    },
+    {
+      "name": "Ошибка при некорректном email",
+      "method": "POST",
+      "path": "/",
+      "headers": {"Content-Type": "application/json"},
+      "body": {
+        "name": "Петр",
+        "phone": "+7 900 000 00 00",
+        "email": "not-an-email",
+        "message": "тест"
+      },
+      "expectedStatus": 400
+    },
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    }
+  ]
+}

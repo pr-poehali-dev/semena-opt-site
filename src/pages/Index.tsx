@@ -3,6 +3,12 @@ import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { toast } from '@/hooks/use-toast';
+import { Toaster } from '@/components/ui/toaster';
+
+const CONTACT_API_URL = '';
 
 const nav = [
   { id: 'news', label: 'Новости' },
@@ -107,10 +113,40 @@ const partners = [
 
 const Index = () => {
   const [active, setActive] = useState('news');
+  const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
+  const [sending, setSending] = useState(false);
 
   const scroll = (id: string) => {
     setActive(id);
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const submitForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!form.name || !form.phone || !form.email || !form.message) {
+      toast({ title: 'Заполните все поля', variant: 'destructive' });
+      return;
+    }
+    if (!CONTACT_API_URL) {
+      toast({ title: 'Форма временно недоступна', description: 'Пожалуйста, свяжитесь по телефону.' });
+      return;
+    }
+    setSending(true);
+    try {
+      const res = await fetch(CONTACT_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Ошибка отправки');
+      toast({ title: 'Заявка отправлена', description: 'Свяжемся с вами в ближайшее время.' });
+      setForm({ name: '', phone: '', email: '', message: '' });
+    } catch (err) {
+      toast({ title: 'Не удалось отправить', description: err instanceof Error ? err.message : 'Попробуйте позже', variant: 'destructive' });
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -421,7 +457,7 @@ const Index = () => {
           <h2 className="font-display text-5xl lg:text-7xl mb-16 leading-[0.95]">
             Позвоните — <em>подберём</em> <br />сорта под ваш регион.
           </h2>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-8 mb-20">
             {[
               { icon: 'Phone', label: 'Телефон', value: '+7 (800) 555-72-19', sub: 'Пн–Сб, 9:00–19:00' },
               { icon: 'Mail', label: 'Почта', value: 'opt@semena-optom.ru', sub: 'Ответим в течение часа' },
@@ -435,6 +471,41 @@ const Index = () => {
               </div>
             ))}
           </div>
+
+          <div className="grid lg:grid-cols-12 gap-10 items-start">
+            <div className="lg:col-span-5">
+              <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--lime))] mb-3">Оставить заявку</div>
+              <h3 className="font-display text-4xl lg:text-5xl leading-[1] mb-6">Напишите нам — перезвоним в течение дня.</h3>
+              <p className="text-sm opacity-70 max-w-sm">Расскажите, какие культуры и объёмы интересуют — подготовим индивидуальный прайс и рассчитаем доставку.</p>
+            </div>
+            <form onSubmit={submitForm} className="lg:col-span-7 bg-[hsl(var(--cream))] text-foreground rounded-3xl p-8 lg:p-10 space-y-5">
+              <div className="grid md:grid-cols-2 gap-5">
+                <div>
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">Имя</label>
+                  <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ваше имя" className="h-12 rounded-xl border-border bg-background" />
+                </div>
+                <div>
+                  <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">Телефон</label>
+                  <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+7 (___) ___-__-__" className="h-12 rounded-xl border-border bg-background" />
+                </div>
+              </div>
+              <div>
+                <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">Email</label>
+                <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="name@company.ru" className="h-12 rounded-xl border-border bg-background" />
+              </div>
+              <div>
+                <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">Сообщение</label>
+                <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Какие культуры и объёмы вас интересуют?" rows={4} className="rounded-xl border-border bg-background resize-none" />
+              </div>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
+                <p className="text-xs text-muted-foreground max-w-xs">Нажимая «Отправить», вы соглашаетесь с обработкой персональных данных.</p>
+                <Button type="submit" disabled={sending} size="lg" className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8 shrink-0">
+                  {sending ? 'Отправляем...' : 'Отправить заявку'}
+                  <Icon name="Send" size={16} />
+                </Button>
+              </div>
+            </form>
+          </div>
         </div>
       </section>
 
@@ -446,6 +517,7 @@ const Index = () => {
           <span>Политика конфиденциальности</span>
         </div>
       </footer>
+      <Toaster />
     </div>
   );
 };

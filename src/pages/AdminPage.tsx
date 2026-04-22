@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
+import { SortableList } from '@/components/admin/SortableList';
 
 const AUTH_URL = 'https://functions.poehali.dev/1fb7ab54-3a59-45b3-ba0e-11a67ac583d5';
 const NEWS_URL = 'https://functions.poehali.dev/aef555b4-f74a-4447-9294-470c7ea276e9';
@@ -306,6 +307,21 @@ const CatalogAdmin = ({ token }: { token: string }) => {
     await load();
   };
 
+  const reorder = async (newItems: CatalogItem[]) => {
+    const reordered = newItems.map((it, idx) => ({ ...it, sort: idx + 1 }));
+    setItems(reordered);
+    try {
+      await Promise.all(reordered.map((it) => fetch(CATALOG_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+        body: JSON.stringify(it),
+      })));
+    } catch {
+      toast({ title: 'Не удалось сохранить порядок', variant: 'destructive' });
+      await load();
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -350,19 +366,33 @@ const CatalogAdmin = ({ token }: { token: string }) => {
         </Card>
       )}
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {items.map((c) => (
-          <Card key={c.id} className="p-4 rounded-2xl">
-            {c.img && <div className="aspect-[4/3] rounded-xl overflow-hidden mb-3"><img src={c.img} alt={c.name} className="w-full h-full object-cover" /></div>}
-            <div className="font-display text-xl mb-1">{c.name}</div>
-            <div className="text-sm text-muted-foreground mb-3">{c.count} сортов · {c.items}</div>
-            <div className="flex gap-2">
-              <Button size="sm" variant="outline" className="rounded-full flex-1" onClick={() => setEditing(c)}><Icon name="Pencil" size={14} /> Изменить</Button>
+      <div className="text-xs text-muted-foreground">Перетаскивайте карточки за ручку слева, чтобы изменить порядок.</div>
+      <SortableList
+        items={items}
+        getId={(c) => c.id ?? c.name}
+        onReorder={reorder}
+        renderItem={(c) => (
+          <Card className="p-4 rounded-2xl flex gap-4 items-center">
+            {c.img ? (
+              <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0">
+                <img src={c.img} alt={c.name} className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <div className="w-20 h-20 rounded-xl bg-muted grid place-items-center shrink-0">
+                <Icon name="Image" size={20} className="text-muted-foreground" />
+              </div>
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="font-display text-lg truncate">{c.name}</div>
+              <div className="text-sm text-muted-foreground truncate">{c.count} сортов · {c.items}</div>
+            </div>
+            <div className="flex gap-2 shrink-0">
+              <Button size="sm" variant="outline" className="rounded-full" onClick={() => setEditing(c)}><Icon name="Pencil" size={14} /></Button>
               <Button size="sm" variant="outline" className="rounded-full text-destructive" onClick={() => remove(c.id!)}><Icon name="Trash2" size={14} /></Button>
             </div>
           </Card>
-        ))}
-      </div>
+        )}
+      />
     </div>
   );
 };
@@ -524,6 +554,21 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
     await load();
   };
 
+  const reorder = async (newItems: ArchiveItem[]) => {
+    const reordered = newItems.map((it, idx) => ({ ...it, sort: idx + 1 }));
+    setItems(reordered);
+    try {
+      await Promise.all(reordered.map((it) => fetch(ARCHIVE_URL, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+        body: JSON.stringify(it),
+      })));
+    } catch {
+      toast({ title: 'Не удалось сохранить порядок', variant: 'destructive' });
+      await load();
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -569,9 +614,13 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
         </Card>
       )}
 
-      <div className="space-y-3">
-        {items.map((a) => (
-          <Card key={a.id} className="p-5 rounded-2xl flex items-center justify-between gap-4">
+      <div className="text-xs text-muted-foreground">Перетаскивайте записи за ручку слева, чтобы изменить порядок.</div>
+      <SortableList
+        items={items}
+        getId={(a) => a.id ?? a.title}
+        onReorder={reorder}
+        renderItem={(a) => (
+          <Card className="p-5 rounded-2xl flex items-center gap-4">
             {a.image ? (
               <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0">
                 <img src={a.image} alt={a.title} className="w-full h-full object-cover" />
@@ -590,8 +639,8 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
               <Button size="sm" variant="outline" className="rounded-full text-destructive" onClick={() => remove(a.id!)}><Icon name="Trash2" size={14} /></Button>
             </div>
           </Card>
-        ))}
-      </div>
+        )}
+      />
     </div>
   );
 };

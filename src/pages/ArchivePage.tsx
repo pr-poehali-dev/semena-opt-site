@@ -39,13 +39,17 @@ const ArchivePage = () => {
 
         <div className="divide-y divide-border/60 border-y border-border/60">
           {archive.map((a, i) => (
-            <div key={i} className="flex items-center justify-between py-5 group cursor-pointer hover:pl-4 transition-all">
+            <Link
+              key={i}
+              to={`/archive/${a.slug}`}
+              className="flex items-center justify-between py-5 group cursor-pointer hover:pl-4 transition-all"
+            >
               <div className="flex items-baseline gap-8">
                 <div className="text-xs uppercase tracking-wider text-muted-foreground w-32 shrink-0">{a.date}</div>
                 <div className="font-display text-xl">{a.title}</div>
               </div>
               <Icon name="ArrowUpRight" size={18} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-            </div>
+            </Link>
           ))}
         </div>
       </section>

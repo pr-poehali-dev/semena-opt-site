@@ -76,6 +76,18 @@ const ContactsFooter = () => {
             </div>
           </div>
 
+          <div className="mb-20 rounded-3xl overflow-hidden border border-[hsl(var(--cream))]/20">
+            <iframe
+              title="Карта — г. Иваново, ул. Зелёная, д. 19В"
+              src="https://yandex.ru/map-widget/v1/?ll=40.948929%2C57.006451&mode=search&text=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D0%BE%20%D1%83%D0%BB.%20%D0%97%D0%B5%D0%BB%D1%91%D0%BD%D0%B0%D1%8F%2019%D0%92&z=16"
+              width="100%"
+              height="440"
+              frameBorder="0"
+              allowFullScreen
+              className="block w-full"
+            />
+          </div>
+
           <div className="grid lg:grid-cols-12 gap-10 items-start">
             <div className="lg:col-span-5">
               <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--lime))] mb-3">Оставить заявку</div>

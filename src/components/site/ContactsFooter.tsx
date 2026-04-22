@@ -47,18 +47,33 @@ const ContactsFooter = () => {
             Позвоните — <em>подберём</em> <br />сорта под ваш регион.
           </h2>
           <div className="grid md:grid-cols-3 gap-8 mb-20">
-            {[
-              { icon: 'Phone', label: 'Телефон', value: '+7 (800) 555-72-19', sub: 'Пн–Сб, 9:00–19:00' },
-              { icon: 'Mail', label: 'Почта', value: 'opt@semena-optom.ru', sub: 'Ответим в течение часа' },
-              { icon: 'MapPin', label: 'Главный склад', value: 'Московская обл., Домодедово', sub: 'ул. Промышленная, 12' },
-            ].map((c, i) => (
-              <div key={i} className="border-t border-[hsl(var(--cream))]/20 pt-8">
-                <Icon name={c.icon} size={24} className="text-[hsl(var(--lime))] mb-6" />
-                <div className="text-xs uppercase tracking-wider opacity-60 mb-2">{c.label}</div>
-                <div className="font-display text-3xl mb-1">{c.value}</div>
-                <div className="text-sm opacity-70">{c.sub}</div>
-              </div>
-            ))}
+            <div className="border-t border-[hsl(var(--cream))]/20 pt-8">
+              <Icon name="Phone" size={24} className="text-[hsl(var(--lime))] mb-6" />
+              <div className="text-xs uppercase tracking-wider opacity-60 mb-2">Телефоны</div>
+              <a href="tel:+79206738383" className="font-display text-2xl lg:text-3xl mb-1 block hover:text-[hsl(var(--lime))] transition-colors">
+                +7 (920) 673-83-83
+              </a>
+              <a href="tel:+79203418866" className="font-display text-2xl lg:text-3xl mb-2 block hover:text-[hsl(var(--lime))] transition-colors">
+                +7 (920) 341-88-66
+              </a>
+              <div className="text-sm opacity-70">Пн–Пт: 9:00–17:00 · Сб: 9:00–14:00</div>
+            </div>
+
+            <div className="border-t border-[hsl(var(--cream))]/20 pt-8">
+              <Icon name="Mail" size={24} className="text-[hsl(var(--lime))] mb-6" />
+              <div className="text-xs uppercase tracking-wider opacity-60 mb-2">Почта</div>
+              <a href="mailto:semena.37@mail.ru" className="font-display text-2xl lg:text-3xl mb-1 block hover:text-[hsl(var(--lime))] transition-colors break-all">
+                semena.37@mail.ru
+              </a>
+              <div className="text-sm opacity-70">Ответим в течение часа</div>
+            </div>
+
+            <div className="border-t border-[hsl(var(--cream))]/20 pt-8">
+              <Icon name="MapPin" size={24} className="text-[hsl(var(--lime))] mb-6" />
+              <div className="text-xs uppercase tracking-wider opacity-60 mb-2">Адрес</div>
+              <div className="font-display text-2xl lg:text-3xl mb-1">г. Иваново</div>
+              <div className="text-sm opacity-70">ул. Зелёная, д. 19В</div>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-12 gap-10 items-start">

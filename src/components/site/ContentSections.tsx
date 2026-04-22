@@ -1,8 +1,9 @@
+import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { news, archive, catalog, prices, materials, partners } from './data';
+import { news, catalog, prices, materials, partners } from './data';
 
 const ContentSections = () => {
   return (
@@ -36,24 +37,13 @@ const ContentSections = () => {
           ))}
         </div>
 
-        <div className="mt-20">
-          <div className="flex items-baseline justify-between mb-8">
-            <h3 className="font-display text-3xl">Архив новостей</h3>
-            <Button variant="ghost" className="rounded-full">
-              Все записи <Icon name="ArrowRight" size={16} />
+        <div className="mt-16 flex justify-center">
+          <Link to="/archive">
+            <Button size="lg" variant="outline" className="rounded-full h-14 px-8 border-foreground/20">
+              Архив новостей
+              <Icon name="ArrowRight" size={18} />
             </Button>
-          </div>
-          <div className="divide-y divide-border/60 border-y border-border/60">
-            {archive.map((a, i) => (
-              <div key={i} className="flex items-center justify-between py-5 group cursor-pointer hover:pl-4 transition-all">
-                <div className="flex items-baseline gap-8">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground w-32 shrink-0">{a.date}</div>
-                  <div className="font-display text-xl">{a.title}</div>
-                </div>
-                <Icon name="ArrowUpRight" size={18} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-              </div>
-            ))}
-          </div>
+          </Link>
         </div>
       </section>
 

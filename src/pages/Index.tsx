@@ -79,14 +79,30 @@ const materials = [
 ];
 
 const partners = [
-  { name: 'Русское Поле', type: 'Агрохолдинг', since: '2015' },
-  { name: 'Поиск', type: 'Селекционная станция', since: '2011' },
-  { name: 'Гавриш', type: 'Селекция и семеноводство', since: '2012' },
-  { name: 'Аэлита', type: 'Производитель семян', since: '2014' },
-  { name: 'СеДеК', type: 'Агрофирма', since: '2016' },
-  { name: 'Биотехника', type: 'Научное объединение', since: '2018' },
-  { name: 'Nunhems', type: 'Международный бренд', since: '2019' },
-  { name: 'Rijk Zwaan', type: 'Селекционный дом', since: '2020' },
+  'Агрофирма «Партнёр»',
+  'Агрохолдинг «Поиск»',
+  'Фирма «Joy»',
+  'Сибирский сад',
+  'Сады России',
+  'Премиум сидс',
+  'Урожай удачи',
+  'Цветущий сад',
+  'Ботаника',
+  'Биотехника',
+  'ЗТК Аэлита / Аэлита-агро',
+  'Русский огород',
+  'Евро-семена',
+  'Марс',
+  'Седек',
+  'Агроника (Плазменные семена)',
+  'Агрико',
+  'ФХ Каприс',
+  'Гавриш',
+  'Дача групп «ПРЕСТИЖ»',
+  'Гумат плодородие',
+  'Зелёная аптека',
+  'Грин Белт',
+  'Ваше хозяйство',
 ];
 
 const Index = () => {
@@ -353,38 +369,18 @@ const Index = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border/60 rounded-3xl overflow-hidden border border-border/60">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-border/60 rounded-3xl overflow-hidden border border-border/60">
           {partners.map((p, i) => (
             <div
               key={i}
-              className="bg-card p-8 flex flex-col justify-between min-h-[180px] group hover:bg-[hsl(var(--forest))] hover:text-[hsl(var(--cream))] transition-colors cursor-pointer"
+              className="bg-card px-6 py-8 flex items-center gap-4 min-h-[110px] group hover:bg-[hsl(var(--forest))] hover:text-[hsl(var(--cream))] transition-colors"
             >
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-full bg-[hsl(var(--lime))]/30 grid place-items-center group-hover:bg-[hsl(var(--lime))]/20">
-                  <Icon name="Sprout" size={18} className="text-[hsl(var(--forest))] group-hover:text-[hsl(var(--lime))]" />
-                </div>
-                <span className="text-[10px] uppercase tracking-wider opacity-60">с {p.since}</span>
+              <div className="w-10 h-10 rounded-full bg-[hsl(var(--lime))]/30 grid place-items-center shrink-0 group-hover:bg-[hsl(var(--lime))]/20">
+                <Icon name="Sprout" size={18} className="text-[hsl(var(--forest))] group-hover:text-[hsl(var(--lime))]" />
               </div>
-              <div>
-                <div className="font-display text-2xl leading-tight mb-1">{p.name}</div>
-                <div className="text-xs opacity-70">{p.type}</div>
-              </div>
+              <div className="font-display text-lg leading-tight">{p}</div>
             </div>
           ))}
-        </div>
-
-        <div className="mt-10 p-8 rounded-3xl bg-[hsl(var(--lime))]/20 border border-[hsl(var(--lime))]/40 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="flex items-start gap-4">
-            <Icon name="Handshake" size={28} className="text-[hsl(var(--forest))] shrink-0 mt-1" />
-            <div>
-              <div className="font-display text-2xl mb-1">Станьте нашим партнёром</div>
-              <div className="text-sm text-muted-foreground max-w-xl">Открыты к сотрудничеству с селекционными станциями, агрохолдингами и оптовыми дистрибьюторами.</div>
-            </div>
-          </div>
-          <Button className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-12 px-6 shrink-0">
-            Предложить сотрудничество
-            <Icon name="ArrowRight" size={16} />
-          </Button>
         </div>
       </section>
 

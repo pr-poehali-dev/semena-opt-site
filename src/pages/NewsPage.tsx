@@ -1,12 +1,24 @@
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { news } from '@/components/site/data';
+import { news as newsFallback, NEWS_API_URL } from '@/components/site/data';
+
+interface NewsItem { slug: string; date: string; tag: string; title: string; text: string; content?: string[] }
 
 const NewsPage = () => {
   const { slug } = useParams();
-  const item = news.find((n) => n.slug === slug);
+  const [items, setItems] = useState<NewsItem[]>(newsFallback);
+
+  useEffect(() => {
+    fetch(NEWS_API_URL)
+      .then((r) => r.json())
+      .then((d) => { if (d.items?.length) setItems(d.items); })
+      .catch(() => {});
+  }, []);
+
+  const item = items.find((n) => n.slug === slug);
 
   return (
     <div className="min-h-screen bg-background text-foreground">

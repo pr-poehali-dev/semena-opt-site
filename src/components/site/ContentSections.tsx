@@ -1,11 +1,44 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { news, catalog, prices, materials, partners } from './data';
+import {
+  news as newsFallback,
+  catalog as catalogFallback,
+  prices as pricesFallback,
+  materials,
+  partners,
+  NEWS_API_URL,
+  CATALOG_API_URL,
+  PRICES_API_URL,
+} from './data';
+
+interface NewsApi { id?: number; slug: string; date: string; tag: string; title: string; text: string; content?: string[] }
+interface CatalogApi { id?: number; name: string; count: number; img: string; items: string[] }
+interface PriceApi { id?: number; name: string; size: string; date: string; url?: string }
 
 const ContentSections = () => {
+  const [news, setNews] = useState<NewsApi[]>(newsFallback);
+  const [catalog, setCatalog] = useState<CatalogApi[]>(catalogFallback);
+  const [prices, setPrices] = useState<PriceApi[]>(pricesFallback);
+
+  useEffect(() => {
+    fetch(NEWS_API_URL)
+      .then((r) => r.json())
+      .then((d) => { if (d.items?.length) setNews(d.items); })
+      .catch(() => {});
+    fetch(CATALOG_API_URL)
+      .then((r) => r.json())
+      .then((d) => { if (d.items?.length) setCatalog(d.items); })
+      .catch(() => {});
+    fetch(PRICES_API_URL)
+      .then((r) => r.json())
+      .then((d) => { if (d.items?.length) setPrices(d.items); })
+      .catch(() => {});
+  }, []);
+
   return (
     <>
       <section id="news" className="container py-24 lg:py-32">
@@ -110,10 +143,19 @@ const ContentSections = () => {
                       <div className="text-xs text-muted-foreground mt-1">{p.size} · обновлён {p.date}</div>
                     </div>
                   </div>
-                  <Button size="sm" className="rounded-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Icon name="Download" size={16} />
-                    Скачать
-                  </Button>
+                  {p.url ? (
+                    <a href={p.url} target="_blank" rel="noopener noreferrer">
+                      <Button size="sm" className="rounded-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white">
+                        <Icon name="Download" size={16} />
+                        Скачать
+                      </Button>
+                    </a>
+                  ) : (
+                    <Button size="sm" className="rounded-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Icon name="Download" size={16} />
+                      Скачать
+                    </Button>
+                  )}
                 </div>
               ))}
             </div>

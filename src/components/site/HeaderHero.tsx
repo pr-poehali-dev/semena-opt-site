@@ -1,6 +1,7 @@
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { nav } from './data';
 
 interface HeaderHeroProps {
@@ -36,10 +37,57 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <Button className="bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white rounded-full">
-              <Icon name="Phone" size={16} />
-              Связаться
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white rounded-full">
+                  <Icon name="Phone" size={16} />
+                  Связаться
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="rounded-3xl max-w-md">
+                <DialogHeader>
+                  <DialogTitle className="font-display text-3xl">Свяжитесь с нами</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-5 pt-2">
+                  <div className="flex items-start gap-4">
+                    <div className="w-11 h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
+                      <Icon name="Phone" size={18} className="text-[hsl(var(--lime))]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Телефоны</div>
+                      <a href="tel:+79206738383" className="font-display text-xl block hover:text-[hsl(var(--earth))] transition-colors">
+                        +7 (920) 673-83-83
+                      </a>
+                      <a href="tel:+79203418866" className="font-display text-xl block hover:text-[hsl(var(--earth))] transition-colors">
+                        +7 (920) 341-88-66
+                      </a>
+                      <div className="text-xs text-muted-foreground mt-1">Пн–Пт: 9:00–17:00 · Сб: 9:00–14:00</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-11 h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
+                      <Icon name="Mail" size={18} className="text-[hsl(var(--lime))]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Почта</div>
+                      <a href="mailto:semena.37@mail.ru" className="font-display text-xl block hover:text-[hsl(var(--earth))] transition-colors break-all">
+                        semena.37@mail.ru
+                      </a>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-11 h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
+                      <Icon name="MapPin" size={18} className="text-[hsl(var(--lime))]" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Адрес</div>
+                      <div className="font-display text-xl">г. Иваново</div>
+                      <div className="text-sm text-muted-foreground">ул. Зелёная, д. 19В</div>
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </header>

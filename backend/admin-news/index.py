@@ -31,7 +31,7 @@ def handler(event, context):
             if kind == 'archive':
                 with conn.cursor() as cur:
                     cur.execute(
-                        "SELECT id, slug, date_label, title, content, image, sort_order FROM archive ORDER BY sort_order, id"
+                        "SELECT id, slug, date_label, title, content, image, sort_order, images FROM archive ORDER BY sort_order, id"
                     )
                     rows = cur.fetchall()
                 data = [
@@ -39,6 +39,7 @@ def handler(event, context):
                         'id': r[0], 'slug': r[1], 'date': r[2], 'title': r[3],
                         'content': [p for p in (r[4] or '').split('\n\n') if p.strip()],
                         'image': r[5], 'sort': r[6],
+                        'images': r[7] or [],
                     }
                     for r in rows
                 ]
@@ -66,23 +67,24 @@ def handler(event, context):
 
         body = json.loads(event.get('body') or '{}')
         image_url = _resolve_img(body, kind)
-        images_list = _resolve_images(body, kind) if kind == 'news' else []
+        images_list = _resolve_images(body, kind)
 
         if method == 'POST':
             slug = body.get('slug') or _slugify(body.get('title', ''))
             if kind == 'archive':
                 with conn.cursor() as cur:
                     cur.execute(
-                        """INSERT INTO archive (slug, date_label, title, content, image, sort_order)
-                           VALUES (%s, %s, %s, %s, %s, %s) RETURNING id""",
+                        """INSERT INTO archive (slug, date_label, title, content, image, sort_order, images)
+                           VALUES (%s, %s, %s, %s, %s, %s, %s::jsonb) RETURNING id""",
                         (
                             slug, body.get('date', ''), body.get('title', ''),
                             body.get('content', ''), image_url, int(body.get('sort') or 0),
+                            json.dumps(images_list, ensure_ascii=False),
                         ),
                     )
                     new_id = cur.fetchone()[0]
                     conn.commit()
-                return _json(200, {'id': new_id, 'image': image_url})
+                return _json(200, {'id': new_id, 'image': image_url, 'images': images_list})
 
             with conn.cursor() as cur:
                 cur.execute(
@@ -107,15 +109,16 @@ def handler(event, context):
                 with conn.cursor() as cur:
                     cur.execute(
                         """UPDATE archive SET slug=%s, date_label=%s, title=%s, content=%s,
-                           image=%s, sort_order=%s WHERE id=%s""",
+                           image=%s, sort_order=%s, images=%s::jsonb WHERE id=%s""",
                         (
                             body.get('slug', ''), body.get('date', ''), body.get('title', ''),
                             body.get('content', ''), image_url, int(body.get('sort') or 0),
+                            json.dumps(images_list, ensure_ascii=False),
                             int(item_id),
                         ),
                     )
                     conn.commit()
-                return _json(200, {'ok': True, 'image': image_url})
+                return _json(200, {'ok': True, 'image': image_url, 'images': images_list})
 
             with conn.cursor() as cur:
                 cur.execute(

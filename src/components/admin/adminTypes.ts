@@ -7,5 +7,5 @@ export type Tab = 'news' | 'archive' | 'catalog';
 
 export interface NewsImageUpload { base64: string; filename: string; contentType: string }
 export interface NewsItem { id?: number; slug?: string; date: string; tag: string; title: string; text: string; content: string; image?: string; imageBase64?: string; imageFilename?: string; imageContentType?: string; published?: boolean; images?: string[]; imagesUploads?: NewsImageUpload[] }
-export interface ArchiveItem { id?: number; slug?: string; date: string; title: string; content: string; image?: string; imageBase64?: string; imageFilename?: string; imageContentType?: string; sort?: number }
+export interface ArchiveItem { id?: number; slug?: string; date: string; title: string; content: string; image?: string; imageBase64?: string; imageFilename?: string; imageContentType?: string; sort?: number; images?: string[]; imagesUploads?: NewsImageUpload[] }
 export interface CatalogItem { id?: number; name: string; count: number; img: string; items: string; sort?: number }

@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card } from '@/components/ui/card';
 import { toast } from '@/hooks/use-toast';
 import { SortableList } from '@/components/admin/SortableList';
-import { ARCHIVE_URL, ArchiveItem } from './adminTypes';
+import { ARCHIVE_URL, ArchiveItem, NewsImageUpload } from './adminTypes';
 
 const ArchiveAdmin = ({ token }: { token: string }) => {
   const [items, setItems] = useState<ArchiveItem[]>([]);
@@ -31,6 +31,45 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
     reader.readAsDataURL(file);
   };
 
+  const onGalleryFiles = (files: FileList) => {
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        const base64 = result.split(',')[1];
+        setEditing((prev) => {
+          if (!prev) return prev;
+          const upload: NewsImageUpload = { base64, filename: file.name, contentType: file.type };
+          return {
+            ...prev,
+            images: [...(prev.images || []), result],
+            imagesUploads: [...(prev.imagesUploads || []), upload],
+          };
+        });
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeGalleryImage = (idx: number) => {
+    setEditing((prev) => {
+      if (!prev) return prev;
+      const current = prev.images || [];
+      const target = current[idx];
+      const isDataUrl = typeof target === 'string' && target.startsWith('data:');
+      const newImages = current.filter((_, i) => i !== idx);
+      let newUploads = prev.imagesUploads || [];
+      if (isDataUrl) {
+        const dataUrls = current.filter((s) => typeof s === 'string' && s.startsWith('data:'));
+        const uploadIdx = dataUrls.indexOf(target);
+        if (uploadIdx >= 0) {
+          newUploads = newUploads.filter((_, i) => i !== uploadIdx);
+        }
+      }
+      return { ...prev, images: newImages, imagesUploads: newUploads };
+    });
+  };
+
   const save = async () => {
     if (!editing) return;
     setLoading(true);
@@ -39,6 +78,7 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
       if (payload.imageBase64 && payload.image?.startsWith('data:')) {
         payload.image = '';
       }
+      payload.images = (payload.images || []).filter((s) => !s.startsWith('data:'));
       const res = await fetch(ARCHIVE_URL, {
         method: editing.id ? 'PUT' : 'POST',
         headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
@@ -118,6 +158,35 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
               placeholder="или вставьте ссылку https://..."
             />
           </div>
+
+          <div>
+            <label className="text-xs uppercase text-muted-foreground mb-1 block">Галерея — дополнительные фото</label>
+            <p className="text-xs text-muted-foreground mb-2">На сайте отобразятся миниатюрами, при клике раскрываются во весь экран.</p>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) => { if (e.target.files?.length) { onGalleryFiles(e.target.files); e.target.value = ''; } }}
+              className="block w-full text-sm file:mr-4 file:py-2.5 file:px-5 file:rounded-full file:border-0 file:bg-[hsl(var(--forest))] file:text-[hsl(var(--cream))] file:cursor-pointer mb-3"
+            />
+            {editing.images && editing.images.length > 0 && (
+              <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+                {editing.images.map((img, i) => (
+                  <div key={i} className="relative aspect-square rounded-xl overflow-hidden border border-border/60 group">
+                    <img src={img} alt={`галерея ${i + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeGalleryImage(i)}
+                      className="absolute top-1 right-1 w-7 h-7 rounded-full bg-destructive text-destructive-foreground grid place-items-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Icon name="X" size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div><label className="text-xs uppercase text-muted-foreground mb-1 block">Slug (для URL, опционально)</label><Input value={editing.slug || ''} onChange={(e) => setEditing({ ...editing, slug: e.target.value })} placeholder="авто-генерация если пусто" /></div>
           <div className="flex gap-3">
             <Button onClick={save} disabled={loading} className="rounded-full bg-[hsl(var(--forest))] text-[hsl(var(--cream))]">{loading ? 'Сохраняем...' : 'Сохранить'}</Button>

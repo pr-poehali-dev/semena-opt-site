@@ -46,7 +46,7 @@ def handler(event, context):
 
             with conn.cursor() as cur:
                 cur.execute(
-                    "SELECT id, slug, date_label, tag, title, text, content, image, published FROM news ORDER BY id DESC"
+                    "SELECT id, slug, date_label, tag, title, text, content, image, published, images FROM news ORDER BY id DESC"
                 )
                 rows = cur.fetchall()
             data = [
@@ -55,6 +55,7 @@ def handler(event, context):
                     'title': r[4], 'text': r[5],
                     'content': [p for p in (r[6] or '').split('\n\n') if p.strip()],
                     'image': r[7], 'published': r[8],
+                    'images': r[9] or [],
                 }
                 for r in rows
             ]
@@ -65,6 +66,7 @@ def handler(event, context):
 
         body = json.loads(event.get('body') or '{}')
         image_url = _resolve_img(body, kind)
+        images_list = _resolve_images(body, kind) if kind == 'news' else []
 
         if method == 'POST':
             slug = body.get('slug') or _slugify(body.get('title', ''))
@@ -84,17 +86,18 @@ def handler(event, context):
 
             with conn.cursor() as cur:
                 cur.execute(
-                    """INSERT INTO news (slug, date_label, tag, title, text, content, image, published)
-                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+                    """INSERT INTO news (slug, date_label, tag, title, text, content, image, published, images)
+                       VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s::jsonb) RETURNING id""",
                     (
                         slug, body.get('date', ''), body.get('tag', 'Новость'),
                         body.get('title', ''), body.get('text', ''),
                         body.get('content', ''), image_url, bool(body.get('published', True)),
+                        json.dumps(images_list, ensure_ascii=False),
                     ),
                 )
                 new_id = cur.fetchone()[0]
                 conn.commit()
-            return _json(200, {'id': new_id, 'image': image_url})
+            return _json(200, {'id': new_id, 'image': image_url, 'images': images_list})
 
         if method == 'PUT':
             item_id = body.get('id')
@@ -117,16 +120,17 @@ def handler(event, context):
             with conn.cursor() as cur:
                 cur.execute(
                     """UPDATE news SET slug=%s, date_label=%s, tag=%s, title=%s, text=%s,
-                       content=%s, image=%s, published=%s WHERE id=%s""",
+                       content=%s, image=%s, published=%s, images=%s::jsonb WHERE id=%s""",
                     (
                         body.get('slug', ''), body.get('date', ''), body.get('tag', 'Новость'),
                         body.get('title', ''), body.get('text', ''),
                         body.get('content', ''), image_url, bool(body.get('published', True)),
+                        json.dumps(images_list, ensure_ascii=False),
                         int(item_id),
                     ),
                 )
                 conn.commit()
-            return _json(200, {'ok': True, 'image': image_url})
+            return _json(200, {'ok': True, 'image': image_url, 'images': images_list})
 
         if method == 'DELETE':
             item_id = body.get('id') or (qs.get('id') if qs else None)
@@ -160,6 +164,38 @@ def _resolve_img(body, kind):
         s3.put_object(Bucket='files', Key=key, Body=raw, ContentType=ctype)
         return f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}"
     return body.get('image', '')
+
+
+def _resolve_images(body, kind):
+    """Принимает images: [url|str, ...] и imagesUploads: [{base64, filename, contentType}, ...] — возвращает список URL."""
+    result = []
+    existing = body.get('images') or []
+    if isinstance(existing, list):
+        for it in existing:
+            if isinstance(it, str) and it and not it.startswith('data:'):
+                result.append(it)
+    uploads = body.get('imagesUploads') or []
+    if isinstance(uploads, list) and uploads:
+        s3 = boto3.client(
+            's3',
+            endpoint_url='https://bucket.poehali.dev',
+            aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
+            aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
+        )
+        for idx, u in enumerate(uploads):
+            if not isinstance(u, dict):
+                continue
+            b64 = u.get('base64')
+            if not b64:
+                continue
+            filename = u.get('filename') or f'{kind}_{idx}.jpg'
+            safe_name = re.sub(r'[^A-Za-z0-9._-]+', '_', filename)
+            key = f'{kind}/{int(datetime.utcnow().timestamp())}_{idx}_{safe_name}'
+            raw = base64.b64decode(b64)
+            ctype = u.get('contentType') or _guess_ct(safe_name)
+            s3.put_object(Bucket='files', Key=key, Body=raw, ContentType=ctype)
+            result.append(f"https://cdn.poehali.dev/projects/{os.environ['AWS_ACCESS_KEY_ID']}/bucket/{key}")
+    return result
 
 
 def _guess_ct(filename):

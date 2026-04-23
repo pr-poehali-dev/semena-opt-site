@@ -5,6 +5,7 @@ export const CATALOG_URL = 'https://functions.poehali.dev/9eabe422-fd0a-4167-afb
 
 export type Tab = 'news' | 'archive' | 'catalog';
 
-export interface NewsItem { id?: number; slug?: string; date: string; tag: string; title: string; text: string; content: string; image?: string; imageBase64?: string; imageFilename?: string; imageContentType?: string; published?: boolean }
+export interface NewsImageUpload { base64: string; filename: string; contentType: string }
+export interface NewsItem { id?: number; slug?: string; date: string; tag: string; title: string; text: string; content: string; image?: string; imageBase64?: string; imageFilename?: string; imageContentType?: string; published?: boolean; images?: string[]; imagesUploads?: NewsImageUpload[] }
 export interface ArchiveItem { id?: number; slug?: string; date: string; title: string; content: string; image?: string; imageBase64?: string; imageFilename?: string; imageContentType?: string; sort?: number }
 export interface CatalogItem { id?: number; name: string; count: number; img: string; items: string; sort?: number }

@@ -10,7 +10,9 @@ import ArchiveItemPage from "./pages/ArchiveItemPage";
 import NewsPage from "./pages/NewsPage";
 import AdminPage from "./pages/AdminPage";
 import FaqPage from "./pages/FaqPage";
+import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
+import CookieBanner from "./components/site/CookieBanner";
 
 const queryClient = new QueryClient();
 
@@ -27,9 +29,11 @@ const App = () => (
           <Route path="/news/:slug" element={<NewsPage />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/faq" element={<FaqPage />} />
+          <Route path="/privacy" element={<PrivacyPage />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <CookieBanner />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

@@ -1,19 +1,26 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from '@/hooks/use-toast';
 import { CONTACT_API_URL } from './data';
 
 const ContactsFooter = () => {
   const [form, setForm] = useState({ name: '', phone: '', email: '', message: '' });
   const [sending, setSending] = useState(false);
+  const [agree, setAgree] = useState(false);
 
   const submitForm = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.email || !form.message) {
       toast({ title: 'Заполните все поля', variant: 'destructive' });
+      return;
+    }
+    if (!agree) {
+      toast({ title: 'Примите политику конфиденциальности', variant: 'destructive' });
       return;
     }
     if (!CONTACT_API_URL) {
@@ -128,9 +135,14 @@ const ContactsFooter = () => {
                 <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">Сообщение</label>
                 <Textarea value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Какие культуры и объёмы вас интересуют?" rows={4} className="rounded-xl border-border bg-background resize-none" />
               </div>
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2">
-                <p className="text-xs text-muted-foreground max-w-xs">Нажимая «Отправить», вы соглашаетесь с обработкой персональных данных.</p>
-                <Button type="submit" disabled={sending} size="lg" className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8 shrink-0">
+              <label className="flex items-start gap-3 cursor-pointer pt-1">
+                <Checkbox checked={agree} onCheckedChange={(v) => setAgree(!!v)} className="mt-0.5" />
+                <span className="text-xs text-muted-foreground">
+                  Я согласен с <Link to="/privacy" target="_blank" className="underline hover:text-foreground">политикой конфиденциальности</Link> и даю согласие на обработку персональных данных.
+                </span>
+              </label>
+              <div className="flex items-center justify-end gap-4">
+                <Button type="submit" disabled={sending || !agree} size="lg" className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8 shrink-0">
                   {sending ? 'Отправляем...' : 'Отправить заявку'}
                   <Icon name="Send" size={16} />
                 </Button>
@@ -145,7 +157,7 @@ const ContactsFooter = () => {
         <div className="flex gap-6">
           <span>ИНН 5074012345</span>
           <span className="hidden md:inline">·</span>
-          <span>Политика конфиденциальности</span>
+          <Link to="/privacy" className="hover:text-foreground transition-colors underline">Политика конфиденциальности</Link>
         </div>
       </footer>
     </>

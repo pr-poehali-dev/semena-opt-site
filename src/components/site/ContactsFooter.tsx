@@ -155,7 +155,7 @@ const ContactsFooter = () => {
       <footer className="container py-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
         <div>© 2026 Семена Оптом. Все права защищены.</div>
         <div className="flex gap-6">
-          <span>ИНН 5074012345</span>
+          <span>ИНН 371118162441</span>
           <span className="hidden md:inline">·</span>
           <Link to="/privacy" className="hover:text-foreground transition-colors underline">Политика конфиденциальности</Link>
         </div>

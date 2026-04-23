@@ -2,8 +2,12 @@ import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { archive as archiveFallback, ARCHIVE_API_URL } from '@/components/site/data';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { toast } from '@/hooks/use-toast';
+import { archive as archiveFallback, ARCHIVE_API_URL, CONTACT_API_URL } from '@/components/site/data';
 
 interface ArchiveItem { slug: string; date: string; title: string; content?: string[]; image?: string; images?: string[] }
 
@@ -11,6 +15,9 @@ const ArchiveItemPage = () => {
   const { slug } = useParams();
   const [archive, setArchive] = useState<ArchiveItem[]>(archiveFallback);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const [requestOpen, setRequestOpen] = useState(false);
+  const [form, setForm] = useState({ name: '', phone: '', email: '' });
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     fetch(ARCHIVE_API_URL)
@@ -32,6 +39,43 @@ const ArchiveItemPage = () => {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxIdx, gallery.length]);
+
+  const closeRequest = () => {
+    setRequestOpen(false);
+    setForm({ name: '', phone: '', email: '' });
+  };
+
+  const submitRequest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!item) return;
+    if (!form.name || !form.phone || !form.email) {
+      toast({ title: 'Заполните все поля', variant: 'destructive' });
+      return;
+    }
+    if (!CONTACT_API_URL) {
+      toast({ title: 'Форма временно недоступна', description: 'Пожалуйста, свяжитесь по телефону.' });
+      return;
+    }
+    setSending(true);
+    try {
+      const res = await fetch(CONTACT_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...form,
+          message: `Запрос прайс-листа со страницы архива: ${item.title}`,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Ошибка отправки');
+      toast({ title: 'Заявка отправлена', description: 'Пришлём прайс-лист и свяжемся в ближайшее время.' });
+      closeRequest();
+    } catch (err) {
+      toast({ title: 'Не удалось отправить', description: err instanceof Error ? err.message : 'Попробуйте позже', variant: 'destructive' });
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -119,14 +163,16 @@ const ArchiveItemPage = () => {
               <div className="mt-16 pt-10 border-t border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Остались вопросы?</div>
-                  <div className="font-display text-2xl">Свяжитесь с менеджером</div>
+                  <div className="font-display text-2xl">Запросите прайс-лист</div>
                 </div>
-                <Link to="/#contacts">
-                  <Button size="lg" className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8">
-                    Оставить заявку
-                    <Icon name="ArrowRight" size={18} />
-                  </Button>
-                </Link>
+                <Button
+                  size="lg"
+                  onClick={() => setRequestOpen(true)}
+                  className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8"
+                >
+                  Оставить заявку
+                  <Icon name="ArrowRight" size={18} />
+                </Button>
               </div>
             </article>
 
@@ -166,6 +212,44 @@ const ArchiveItemPage = () => {
           </div>
         </div>
       )}
+
+      <Dialog open={requestOpen} onOpenChange={(o) => { if (!o) closeRequest(); }}>
+        <DialogContent className="rounded-3xl max-w-md">
+          <DialogHeader>
+            <DialogTitle className="font-display text-3xl">Запрос прайс-листа</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={submitRequest} className="space-y-3 pt-2">
+            <div>
+              <label className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 block">Имя</label>
+              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Ваше имя" className="h-11 rounded-xl" />
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 block">Телефон</label>
+              <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+7 (___) ___-__-__" className="h-11 rounded-xl" />
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5 block">Email</label>
+              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="name@company.ru" className="h-11 rounded-xl" />
+            </div>
+            <Textarea
+              value={item ? `Запрос прайс-листа со страницы архива: ${item.title}` : ''}
+              readOnly
+              rows={2}
+              className="rounded-xl bg-muted/50 resize-none"
+            />
+            <div className="flex gap-3 pt-1">
+              <Button type="button" variant="outline" onClick={closeRequest} className="rounded-full h-11 px-5 border-foreground/20">
+                Отмена
+              </Button>
+              <Button type="submit" disabled={sending} className="flex-1 rounded-full h-11 bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))]">
+                {sending ? 'Отправляем...' : 'Отправить заявку'}
+                <Icon name="Send" size={14} />
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground pt-1">Нажимая «Отправить», вы соглашаетесь с обработкой персональных данных.</p>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       {lightboxIdx !== null && gallery[lightboxIdx] && (
         <div

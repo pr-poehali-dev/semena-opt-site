@@ -4,6 +4,7 @@ import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import {
   news as newsFallback,
   catalog as catalogFallback,
@@ -19,6 +20,7 @@ interface CatalogApi { id?: number; name: string; count: number; img: string; it
 const ContentSections = () => {
   const [news, setNews] = useState<NewsApi[]>(newsFallback);
   const [catalog, setCatalog] = useState<CatalogApi[]>(catalogFallback);
+  const [selectedCategory, setSelectedCategory] = useState<CatalogApi | null>(null);
 
   useEffect(() => {
     fetch(NEWS_API_URL)
@@ -30,6 +32,10 @@ const ContentSections = () => {
       .then((d) => { if (d.items?.length) setCatalog(d.items); })
       .catch(() => {});
   }, []);
+
+  const priceMailHref = selectedCategory
+    ? `mailto:semena.37@mail.ru?subject=${encodeURIComponent('Запрос прайс-листа: ' + selectedCategory.name)}&body=${encodeURIComponent('Здравствуйте! Пришлите, пожалуйста, актуальный прайс-лист по категории «' + selectedCategory.name + '».')}`
+    : '#';
 
   return (
     <>
@@ -95,26 +101,84 @@ const ContentSections = () => {
 
           <div className="grid md:grid-cols-3 gap-6">
             {catalog.map((c, i) => (
-              <Card key={i} className="overflow-hidden rounded-3xl bg-[hsl(var(--cream))] border-0 text-foreground group cursor-pointer">
-                <div className="aspect-[4/3] overflow-hidden">
-                  <img src={c.img} alt={c.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-                </div>
-                <div className="p-7">
-                  <div className="flex items-baseline justify-between mb-4">
-                    <h3 className="font-display text-2xl">{c.name}</h3>
-                    <span className="font-display text-3xl text-[hsl(var(--earth))]">{c.count}</span>
+              <button
+                key={i}
+                type="button"
+                onClick={() => setSelectedCategory(c)}
+                className="text-left"
+              >
+                <Card className="overflow-hidden rounded-3xl bg-[hsl(var(--cream))] border-0 text-foreground group cursor-pointer h-full hover:shadow-2xl hover:-translate-y-1 transition-all">
+                  <div className="aspect-[4/3] overflow-hidden relative">
+                    <img src={c.img} alt={c.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <div className="absolute inset-0 bg-[hsl(var(--forest))]/0 group-hover:bg-[hsl(var(--forest))]/20 transition-colors grid place-items-center">
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-[hsl(var(--cream))] text-[hsl(var(--forest))] px-5 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
+                        Подробнее <Icon name="ArrowUpRight" size={16} />
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {c.items.map((it) => (
-                      <span key={it} className="text-xs px-3 py-1 rounded-full bg-muted">{it}</span>
-                    ))}
+                  <div className="p-7">
+                    <div className="flex items-baseline justify-between mb-4">
+                      <h3 className="font-display text-2xl">{c.name}</h3>
+                      <span className="font-display text-3xl text-[hsl(var(--earth))]">{c.count}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {c.items.map((it) => (
+                        <span key={it} className="text-xs px-3 py-1 rounded-full bg-muted">{it}</span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </Card>
+                </Card>
+              </button>
             ))}
           </div>
         </div>
       </section>
+
+      <Dialog open={!!selectedCategory} onOpenChange={(o) => !o && setSelectedCategory(null)}>
+        <DialogContent className="rounded-3xl max-w-lg p-0 overflow-hidden">
+          {selectedCategory && (
+            <>
+              <div className="aspect-[16/9] overflow-hidden">
+                <img src={selectedCategory.img} alt={selectedCategory.name} className="w-full h-full object-cover" />
+              </div>
+              <div className="p-6 space-y-5">
+                <DialogHeader>
+                  <DialogTitle className="font-display text-3xl flex items-baseline justify-between gap-4">
+                    <span>{selectedCategory.name}</span>
+                    <span className="text-2xl text-[hsl(var(--earth))]">{selectedCategory.count} сортов</span>
+                  </DialogTitle>
+                </DialogHeader>
+                <div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">Представленные культуры</div>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedCategory.items.map((it) => (
+                      <span key={it} className="text-xs px-3 py-1 rounded-full bg-muted">{it}</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="p-4 rounded-2xl bg-[hsl(var(--lime))]/20 border border-[hsl(var(--lime))]/40 flex items-start gap-3">
+                  <Icon name="Info" size={18} className="text-[hsl(var(--forest))] mt-0.5 shrink-0" />
+                  <div className="text-sm">Запросите прайс-лист с актуальными ценами или свяжитесь с менеджером, чтобы подобрать сорта под ваш регион.</div>
+                </div>
+                <div className="flex flex-col sm:flex-row gap-3 pt-1">
+                  <a href={priceMailHref} className="flex-1">
+                    <Button className="w-full rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-12">
+                      <Icon name="FileText" size={16} />
+                      Запросить прайс-лист
+                    </Button>
+                  </a>
+                  <a href="tel:+79206738383" className="flex-1">
+                    <Button variant="outline" className="w-full rounded-full h-12 border-foreground/20">
+                      <Icon name="Phone" size={16} />
+                      Связаться с менеджером
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <section id="materials" className="container py-24 lg:py-32">
         <div className="flex items-end justify-between mb-12 gap-6">

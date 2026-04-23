@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -37,12 +36,6 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
             ))}
           </nav>
           <div className="flex items-center gap-2">
-            <Link to="/faq" className="hidden md:block">
-              <Button variant="ghost" className="rounded-full">
-                <Icon name="HelpCircle" size={16} />
-                FAQ
-              </Button>
-            </Link>
             <Button className="bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white rounded-full">
               <Icon name="Phone" size={16} />
               Связаться
@@ -72,10 +65,6 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
                 <Button size="lg" onClick={() => scroll('catalog')} className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8">
                   Смотреть каталог
                   <Icon name="ArrowRight" size={18} />
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => scroll('prices')} className="rounded-full h-14 px-8 border-foreground/20">
-                  <Icon name="Download" size={18} />
-                  Скачать прайс
                 </Button>
               </div>
             </div>

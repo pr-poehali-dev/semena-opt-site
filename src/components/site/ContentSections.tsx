@@ -7,22 +7,18 @@ import { Badge } from '@/components/ui/badge';
 import {
   news as newsFallback,
   catalog as catalogFallback,
-  prices as pricesFallback,
   partners,
   NEWS_API_URL,
   CATALOG_API_URL,
-  PRICES_API_URL,
 } from './data';
 import { faqCategories } from './faq';
 
 interface NewsApi { id?: number; slug: string; date: string; tag: string; title: string; text: string; content?: string[]; image?: string }
 interface CatalogApi { id?: number; name: string; count: number; img: string; items: string[] }
-interface PriceApi { id?: number; name: string; size: string; date: string; url?: string }
 
 const ContentSections = () => {
   const [news, setNews] = useState<NewsApi[]>(newsFallback);
   const [catalog, setCatalog] = useState<CatalogApi[]>(catalogFallback);
-  const [prices, setPrices] = useState<PriceApi[]>(pricesFallback);
 
   useEffect(() => {
     fetch(NEWS_API_URL)
@@ -32,10 +28,6 @@ const ContentSections = () => {
     fetch(CATALOG_API_URL)
       .then((r) => r.json())
       .then((d) => { if (d.items?.length) setCatalog(d.items); })
-      .catch(() => {});
-    fetch(PRICES_API_URL)
-      .then((r) => r.json())
-      .then((d) => { if (d.items?.length) setPrices(d.items); })
       .catch(() => {});
   }, []);
 
@@ -124,53 +116,7 @@ const ContentSections = () => {
         </div>
       </section>
 
-      <section id="prices" className="container py-24 lg:py-32">
-        <div className="grid lg:grid-cols-12 gap-12">
-          <div className="lg:col-span-4">
-            <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-3">03 — Документы</div>
-            <h2 className="font-display text-5xl lg:text-6xl leading-[0.95]">Прайс-<br />листы</h2>
-            <p className="mt-6 text-muted-foreground">Актуальные цены в формате PDF и XLSX. Обновляются по мере поступления новых партий.</p>
-            <div className="mt-8 p-6 rounded-2xl bg-[hsl(var(--lime))]/20 border border-[hsl(var(--lime))]/40">
-              <div className="flex items-start gap-3">
-                <Icon name="Info" size={20} className="text-[hsl(var(--forest))] mt-1 shrink-0" />
-                <div className="text-sm">Для получения индивидуальных условий запросите персональный прайс у менеджера.</div>
-              </div>
-            </div>
-          </div>
-          <div className="lg:col-span-8">
-            <div className="space-y-3">
-              {prices.map((p, i) => (
-                <div key={i} className="flex items-center justify-between p-6 rounded-2xl bg-card border border-border/60 hover:border-[hsl(var(--forest))] transition-colors group">
-                  <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 rounded-xl bg-[hsl(var(--forest))] grid place-items-center shrink-0">
-                      <Icon name="FileText" size={24} className="text-[hsl(var(--lime))]" />
-                    </div>
-                    <div>
-                      <div className="font-display text-xl">{p.name}</div>
-                      <div className="text-xs text-muted-foreground mt-1">{p.size} · обновлён {p.date}</div>
-                    </div>
-                  </div>
-                  {p.url ? (
-                    <a href={p.url} target="_blank" rel="noopener noreferrer">
-                      <Button size="sm" className="rounded-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white">
-                        <Icon name="Download" size={16} />
-                        Скачать
-                      </Button>
-                    </a>
-                  ) : (
-                    <Button size="sm" className="rounded-full bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Icon name="Download" size={16} />
-                      Скачать
-                    </Button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="materials" className="container pb-24 lg:pb-32">
+      <section id="materials" className="container py-24 lg:py-32">
         <div className="flex items-end justify-between mb-12 gap-6">
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-3">04 — FAQ</div>

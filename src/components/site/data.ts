@@ -2,12 +2,10 @@ export const CONTACT_API_URL = 'https://functions.poehali.dev/73b03e72-4f94-4e18
 export const NEWS_API_URL = 'https://functions.poehali.dev/aef555b4-f74a-4447-9294-470c7ea276e9';
 export const ARCHIVE_API_URL = 'https://functions.poehali.dev/aef555b4-f74a-4447-9294-470c7ea276e9?kind=archive';
 export const CATALOG_API_URL = 'https://functions.poehali.dev/9eabe422-fd0a-4167-afb7-acc6cf903f76';
-export const PRICES_API_URL = 'https://functions.poehali.dev/e8b0609f-fa31-42bd-bba6-84527f2c03fb';
 
 export const nav = [
   { id: 'news', label: 'Новости' },
   { id: 'catalog', label: 'Каталог' },
-  { id: 'prices', label: 'Прайс-листы' },
   { id: 'materials', label: 'Вопросы-ответы' },
   { id: 'partners', label: 'Партнёры' },
   { id: 'about', label: 'О магазине' },
@@ -125,13 +123,6 @@ export const catalog = [
     img: 'https://cdn.poehali.dev/projects/6e30ca34-8fe1-4535-8d16-622fe38c58fb/files/576adcb1-4f20-4559-a90a-4201de6ac62a.jpg',
     items: ['Петуния', 'Бархатцы', 'Астра', 'Циния', 'Космея'],
   },
-];
-
-export const prices = [
-  { name: 'Овощи и зелень — весна 2026', size: 'PDF, 1.2 МБ', date: '15.04.2026' },
-  { name: 'Цветочные семена — полный каталог', size: 'PDF, 3.4 МБ', date: '02.04.2026' },
-  { name: 'Газонные травы и травосмеси', size: 'PDF, 680 КБ', date: '28.03.2026' },
-  { name: 'Зерновые и масличные культуры', size: 'XLSX, 420 КБ', date: '20.03.2026' },
 ];
 
 export const materials = [

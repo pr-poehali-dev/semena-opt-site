@@ -10,7 +10,6 @@ import { AUTH_URL, Tab } from '@/components/admin/adminTypes';
 import NewsAdmin from '@/components/admin/NewsAdmin';
 import ArchiveAdmin from '@/components/admin/ArchiveAdmin';
 import CatalogAdmin from '@/components/admin/CatalogAdmin';
-import PricesAdmin from '@/components/admin/PricesAdmin';
 
 const AdminPage = () => {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('admin_token'));
@@ -89,7 +88,7 @@ const AdminPage = () => {
           </Button>
         </div>
         <div className="container flex gap-2 pb-3 flex-wrap">
-          {(['news', 'archive', 'catalog', 'prices'] as Tab[]).map((t) => (
+          {(['news', 'archive', 'catalog'] as Tab[]).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -97,7 +96,7 @@ const AdminPage = () => {
                 tab === t ? 'bg-[hsl(var(--forest))] text-[hsl(var(--cream))]' : 'hover:bg-muted'
               }`}
             >
-              {t === 'news' ? 'Новости' : t === 'archive' ? 'Архив' : t === 'catalog' ? 'Каталог' : 'Прайс-листы'}
+              {t === 'news' ? 'Новости' : t === 'archive' ? 'Архив' : 'Каталог'}
             </button>
           ))}
         </div>
@@ -107,7 +106,6 @@ const AdminPage = () => {
         {tab === 'news' && <NewsAdmin token={token} />}
         {tab === 'archive' && <ArchiveAdmin token={token} />}
         {tab === 'catalog' && <CatalogAdmin token={token} />}
-        {tab === 'prices' && <PricesAdmin token={token} />}
       </main>
       <Toaster />
     </div>

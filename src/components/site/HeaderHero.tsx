@@ -95,7 +95,7 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
                         Почта
                       </div>
                       <a
-                        href="mailto:semena37@mail.ru"
+                        href="mailto:semena.37@mail.ru"
                         className="font-display text-xl block hover:text-[hsl(var(--earth))] transition-colors break-all"
                       >
                         semena37@mail.ru

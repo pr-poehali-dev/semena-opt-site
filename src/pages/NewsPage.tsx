@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { toast } from '@/hooks/use-toast';
 import { news as newsFallback, NEWS_API_URL, CONTACT_API_URL } from '@/components/site/data';
 import SiteLogo from '@/components/site/SiteLogo';
+import AdaptiveImage from '@/components/site/AdaptiveImage';
 
 interface NewsItem { slug: string; date: string; tag: string; title: string; text: string; content?: string[]; image?: string; images?: string[] }
 
@@ -126,9 +127,16 @@ const NewsPage = () => {
           <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl leading-[1.05] lg:leading-[1] mb-6 sm:mb-8">{item.title}</h1>
 
           {item.image && (
-            <div className="aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-10">
-              <img src={item.image} alt={item.title} loading="eager" decoding="async" fetchPriority="high" width={1200} height={675} className="w-full h-full object-cover" />
-            </div>
+            <AdaptiveImage
+              src={item.image}
+              alt={item.title}
+              mode="fit"
+              maxHeightClass="max-h-[75vh]"
+              wrapperClassName="rounded-2xl sm:rounded-3xl mb-6 sm:mb-10"
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
           )}
 
           <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed mb-6 sm:mb-10 border-l-4 border-[hsl(var(--earth))] pl-4 sm:pl-6">

@@ -18,6 +18,7 @@ import {
   CONTACT_API_URL,
 } from './data';
 import { faqCategories } from './faq';
+import AdaptiveImage from './AdaptiveImage';
 
 interface NewsApi { id?: number; slug: string; date: string; tag: string; title: string; text: string; content?: string[]; image?: string }
 interface CatalogApi { id?: number; name: string; count: number; img: string; items: string[] }
@@ -104,7 +105,16 @@ const ContentSections = () => {
               <Card className="rounded-2xl sm:rounded-3xl border-border/60 hover:shadow-xl transition-all hover:-translate-y-1 bg-card group cursor-pointer h-full overflow-hidden flex flex-col">
                 {n.image && (
                   <div className="aspect-[16/10] overflow-hidden">
-                    <img src={n.image} alt={n.title} loading="lazy" decoding="async" width={600} height={375} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <AdaptiveImage
+                      src={n.image}
+                      alt={n.title}
+                      mode="cover-smart"
+                      loading="lazy"
+                      decoding="async"
+                      width={600}
+                      height={375}
+                      className="group-hover:scale-105 transition-transform duration-700"
+                    />
                   </div>
                 )}
                 <div className="p-5 sm:p-7 flex-1 flex flex-col">
@@ -155,7 +165,16 @@ const ContentSections = () => {
               >
                 <Card className="overflow-hidden rounded-2xl sm:rounded-3xl bg-[hsl(var(--cream))] border-0 text-foreground group cursor-pointer h-full hover:shadow-2xl hover:-translate-y-1 transition-all">
                   <div className="aspect-[4/3] overflow-hidden relative">
-                    <img src={c.img} alt={c.name} loading="lazy" decoding="async" width={600} height={450} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <AdaptiveImage
+                      src={c.img}
+                      alt={c.name}
+                      mode="cover-smart"
+                      loading="lazy"
+                      decoding="async"
+                      width={600}
+                      height={450}
+                      className="group-hover:scale-105 transition-transform duration-700"
+                    />
                     <div className="absolute inset-0 bg-[hsl(var(--forest))]/0 group-hover:bg-[hsl(var(--forest))]/20 transition-colors grid place-items-center">
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-[hsl(var(--cream))] text-[hsl(var(--forest))] px-5 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
                         Подробнее <Icon name="ArrowUpRight" size={16} />

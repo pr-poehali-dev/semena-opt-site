@@ -156,6 +156,11 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
                 <img
                   src="https://cdn.poehali.dev/projects/6e30ca34-8fe1-4535-8d16-622fe38c58fb/files/a1c310be-a37a-41df-bcbd-1078909d16ec.jpg"
                   alt="Семена"
+                  width={800}
+                  height={1000}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 bg-background/95 backdrop-blur rounded-xl sm:rounded-2xl p-3 sm:p-5">

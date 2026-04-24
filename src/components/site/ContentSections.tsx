@@ -104,7 +104,7 @@ const ContentSections = () => {
               <Card className="rounded-2xl sm:rounded-3xl border-border/60 hover:shadow-xl transition-all hover:-translate-y-1 bg-card group cursor-pointer h-full overflow-hidden flex flex-col">
                 {n.image && (
                   <div className="aspect-[16/10] overflow-hidden">
-                    <img src={n.image} alt={n.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <img src={n.image} alt={n.title} loading="lazy" decoding="async" width={600} height={375} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                   </div>
                 )}
                 <div className="p-5 sm:p-7 flex-1 flex flex-col">
@@ -155,7 +155,7 @@ const ContentSections = () => {
               >
                 <Card className="overflow-hidden rounded-2xl sm:rounded-3xl bg-[hsl(var(--cream))] border-0 text-foreground group cursor-pointer h-full hover:shadow-2xl hover:-translate-y-1 transition-all">
                   <div className="aspect-[4/3] overflow-hidden relative">
-                    <img src={c.img} alt={c.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                    <img src={c.img} alt={c.name} loading="lazy" decoding="async" width={600} height={450} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                     <div className="absolute inset-0 bg-[hsl(var(--forest))]/0 group-hover:bg-[hsl(var(--forest))]/20 transition-colors grid place-items-center">
                       <div className="opacity-0 group-hover:opacity-100 transition-opacity bg-[hsl(var(--cream))] text-[hsl(var(--forest))] px-5 py-2 rounded-full text-sm font-medium inline-flex items-center gap-2">
                         Подробнее <Icon name="ArrowUpRight" size={16} />
@@ -185,7 +185,7 @@ const ContentSections = () => {
           {selectedCategory && (
             <>
               <div className="aspect-[16/9] overflow-hidden">
-                <img src={selectedCategory.img} alt={selectedCategory.name} className="w-full h-full object-cover" />
+                <img src={selectedCategory.img} alt={selectedCategory.name} loading="lazy" decoding="async" width={800} height={450} className="w-full h-full object-cover" />
               </div>
               <div className="p-5 sm:p-6 space-y-4 sm:space-y-5">
                 <DialogHeader>
@@ -324,7 +324,7 @@ const ContentSections = () => {
               className="bg-card px-4 sm:px-6 py-5 sm:py-8 flex items-center gap-3 sm:gap-4 min-h-[90px] sm:min-h-[110px]"
             >
               <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shrink-0 border border-border/60 bg-[hsl(var(--cream))]">
-                <img src={p.logo} alt={p.name} className="w-full h-full object-cover" />
+                <img src={p.logo} alt={p.name} loading="lazy" decoding="async" width={48} height={48} className="w-full h-full object-cover" />
               </div>
               <div className="font-display text-base sm:text-lg leading-tight">{p.name}</div>
             </div>
@@ -335,7 +335,7 @@ const ContentSections = () => {
       <section id="about" className="container pb-14 sm:pb-20 lg:pb-32">
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div className="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-2xl sm:rounded-[2rem] overflow-hidden">
-            <img src="https://cdn.poehali.dev/projects/6e30ca34-8fe1-4535-8d16-622fe38c58fb/files/576adcb1-4f20-4559-a90a-4201de6ac62a.jpg" alt="Склад" className="w-full h-full object-cover" />
+            <img src="https://cdn.poehali.dev/projects/6e30ca34-8fe1-4535-8d16-622fe38c58fb/files/576adcb1-4f20-4559-a90a-4201de6ac62a.jpg" alt="Склад" loading="lazy" decoding="async" width={800} height={1000} className="w-full h-full object-cover" />
           </div>
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-2 sm:mb-3">05 — О нас</div>

@@ -8,11 +8,13 @@ import { toast } from '@/hooks/use-toast';
 import { SortableList } from '@/components/admin/SortableList';
 import { ARCHIVE_URL, ArchiveItem, NewsImageUpload } from './adminTypes';
 import { compressImage } from './imageCompress';
+import UploadProgress from './UploadProgress';
 
 const ArchiveAdmin = ({ token }: { token: string }) => {
   const [items, setItems] = useState<ArchiveItem[]>([]);
   const [editing, setEditing] = useState<ArchiveItem | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState<{ current: number; total: number } | null>(null);
 
   const load = async () => {
     const res = await fetch(ARCHIVE_URL);
@@ -23,16 +25,23 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
   useEffect(() => { load(); }, []);
 
   const onImg = async (file: File) => {
+    setUploading({ current: 0, total: 1 });
     try {
       const c = await compressImage(file);
       setEditing((prev) => prev ? { ...prev, imageBase64: c.base64, imageFilename: c.filename, imageContentType: c.contentType, image: c.dataUrl } : prev);
+      setUploading({ current: 1, total: 1 });
     } catch {
       toast({ title: 'Не удалось обработать фото', variant: 'destructive' });
+    } finally {
+      setTimeout(() => setUploading(null), 300);
     }
   };
 
   const onGalleryFiles = async (files: FileList) => {
-    for (const file of Array.from(files)) {
+    const arr = Array.from(files);
+    setUploading({ current: 0, total: arr.length });
+    for (let i = 0; i < arr.length; i++) {
+      const file = arr[i];
       try {
         const c = await compressImage(file);
         setEditing((prev) => {
@@ -47,7 +56,9 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
       } catch {
         toast({ title: `Ошибка обработки ${file.name}`, variant: 'destructive' });
       }
+      setUploading({ current: i + 1, total: arr.length });
     }
+    setTimeout(() => setUploading(null), 300);
   };
 
   const removeGalleryImage = (idx: number) => {
@@ -145,6 +156,7 @@ const ArchiveAdmin = ({ token }: { token: string }) => {
                 <img src={editing.image} alt="превью" className="w-full h-full object-cover" />
               </div>
             )}
+            {uploading && <UploadProgress current={uploading.current} total={uploading.total} />}
             <input
               type="file"
               accept="image/*"

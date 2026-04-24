@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from '@/hooks/use-toast';
 import { NEWS_URL, NewsItem, NewsImageUpload } from './adminTypes';
 import { compressImage } from './imageCompress';
+import UploadProgress from './UploadProgress';
 
 const MONTHS = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
 
@@ -45,6 +46,7 @@ const NewsAdmin = ({ token }: { token: string }) => {
   const [items, setItems] = useState<NewsItem[]>([]);
   const [editing, setEditing] = useState<NewsItem | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState<{ current: number; total: number } | null>(null);
 
   const load = async () => {
     const res = await fetch(NEWS_URL);
@@ -55,16 +57,23 @@ const NewsAdmin = ({ token }: { token: string }) => {
   useEffect(() => { load(); }, []);
 
   const onNewsImg = async (file: File) => {
+    setUploading({ current: 0, total: 1 });
     try {
       const c = await compressImage(file);
       setEditing((prev) => prev ? { ...prev, imageBase64: c.base64, imageFilename: c.filename, imageContentType: c.contentType, image: c.dataUrl } : prev);
+      setUploading({ current: 1, total: 1 });
     } catch {
       toast({ title: 'Не удалось обработать фото', variant: 'destructive' });
+    } finally {
+      setTimeout(() => setUploading(null), 300);
     }
   };
 
   const onGalleryFiles = async (files: FileList) => {
-    for (const file of Array.from(files)) {
+    const arr = Array.from(files);
+    setUploading({ current: 0, total: arr.length });
+    for (let i = 0; i < arr.length; i++) {
+      const file = arr[i];
       try {
         const c = await compressImage(file);
         setEditing((prev) => {
@@ -79,7 +88,9 @@ const NewsAdmin = ({ token }: { token: string }) => {
       } catch {
         toast({ title: `Ошибка обработки ${file.name}`, variant: 'destructive' });
       }
+      setUploading({ current: i + 1, total: arr.length });
     }
+    setTimeout(() => setUploading(null), 300);
   };
 
   const removeGalleryImage = (idx: number) => {
@@ -193,6 +204,7 @@ const NewsAdmin = ({ token }: { token: string }) => {
                 <img src={editing.image} alt="превью" className="w-full h-full object-cover" />
               </div>
             )}
+            {uploading && <UploadProgress current={uploading.current} total={uploading.total} />}
             <input
               type="file"
               accept="image/*"

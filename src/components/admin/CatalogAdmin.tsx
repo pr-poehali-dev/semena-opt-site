@@ -8,11 +8,13 @@ import { toast } from '@/hooks/use-toast';
 import { SortableList } from '@/components/admin/SortableList';
 import { CATALOG_URL, CatalogItem } from './adminTypes';
 import { compressImage } from './imageCompress';
+import UploadProgress from './UploadProgress';
 
 const CatalogAdmin = ({ token }: { token: string }) => {
   const [items, setItems] = useState<CatalogItem[]>([]);
   const [editing, setEditing] = useState<(CatalogItem & { imgBase64?: string; imgFilename?: string; imgContentType?: string }) | null>(null);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState<{ current: number; total: number } | null>(null);
 
   const load = async () => {
     const res = await fetch(CATALOG_URL);
@@ -23,11 +25,15 @@ const CatalogAdmin = ({ token }: { token: string }) => {
   useEffect(() => { load(); }, []);
 
   const onImgFile = async (file: File) => {
+    setUploading({ current: 0, total: 1 });
     try {
       const c = await compressImage(file);
       setEditing((prev) => prev ? { ...prev, imgBase64: c.base64, imgFilename: c.filename, imgContentType: c.contentType, img: c.dataUrl } : prev);
+      setUploading({ current: 1, total: 1 });
     } catch {
       toast({ title: 'Не удалось обработать фото', variant: 'destructive' });
+    } finally {
+      setTimeout(() => setUploading(null), 300);
     }
   };
 
@@ -105,6 +111,7 @@ const CatalogAdmin = ({ token }: { token: string }) => {
                 <img src={editing.img} alt="превью" className="w-full h-full object-cover" />
               </div>
             )}
+            {uploading && <UploadProgress current={uploading.current} total={uploading.total} />}
             <input
               type="file"
               accept="image/*"

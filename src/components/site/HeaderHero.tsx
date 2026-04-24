@@ -20,7 +20,7 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
   return (
     <>
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/60">
-        <div className="container flex items-center justify-between h-16">
+        <div className="container flex items-center justify-between h-14 sm:h-16 gap-3">
           <SiteLogo to="" />
 
           <nav className="hidden lg:flex items-center gap-1">
@@ -41,20 +41,20 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
           <div className="flex items-center gap-2">
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white rounded-full">
+                <Button className="bg-[hsl(var(--earth))] hover:bg-[hsl(var(--earth))]/90 text-white rounded-full h-9 sm:h-10 px-3 sm:px-4 text-sm">
                   <Icon name="Phone" size={16} />
-                  Связаться
+                  <span className="hidden xs:inline sm:inline">Связаться</span>
                 </Button>
               </DialogTrigger>
-              <DialogContent className="rounded-3xl max-w-md">
+              <DialogContent className="rounded-3xl w-[calc(100vw-1.5rem)] max-w-md p-5 sm:p-6">
                 <DialogHeader>
-                  <DialogTitle className="font-display text-3xl">
+                  <DialogTitle className="font-display text-2xl sm:text-3xl">
                     Свяжитесь с нами
                   </DialogTitle>
                 </DialogHeader>
-                <div className="space-y-5 pt-2">
-                  <div className="flex items-start gap-4">
-                    <div className="w-11 h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
+                <div className="space-y-4 sm:space-y-5 pt-2">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
                       <Icon
                         name="Phone"
                         size={18}
@@ -67,13 +67,13 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
                       </div>
                       <a
                         href="tel:+79206738383"
-                        className="font-display text-xl block hover:text-[hsl(var(--earth))] transition-colors"
+                        className="font-display text-lg sm:text-xl block hover:text-[hsl(var(--earth))] transition-colors"
                       >
                         +7 (920) 673-83-83
                       </a>
                       <a
                         href="tel:+79203418866"
-                        className="font-display text-xl block hover:text-[hsl(var(--earth))] transition-colors"
+                        className="font-display text-lg sm:text-xl block hover:text-[hsl(var(--earth))] transition-colors"
                       >
                         +7 (920) 341-88-66
                       </a>
@@ -82,8 +82,8 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
                       </div>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-11 h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
                       <Icon
                         name="Mail"
                         size={18}
@@ -96,14 +96,14 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
                       </div>
                       <a
                         href="mailto:semena.37@mail.ru"
-                        className="font-display text-xl block hover:text-[hsl(var(--earth))] transition-colors break-all"
+                        className="font-display text-lg sm:text-xl block hover:text-[hsl(var(--earth))] transition-colors break-all"
                       >
                         semena.37@mail.ru
                       </a>
                     </div>
                   </div>
-                  <div className="flex items-start gap-4">
-                    <div className="w-11 h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-[hsl(var(--forest))] grid place-items-center shrink-0">
                       <Icon
                         name="MapPin"
                         size={18}
@@ -114,7 +114,7 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
                       <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">
                         Адрес
                       </div>
-                      <div className="font-display text-xl">г. Иваново</div>
+                      <div className="font-display text-lg sm:text-xl">г. Иваново</div>
                       <div className="text-sm text-muted-foreground">
                         ул. Зелёная, д. 19В
                       </div>
@@ -129,21 +129,21 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
 
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 grain opacity-[0.08] pointer-events-none" />
-        <div className="container pt-20 pb-24 lg:pt-32 lg:pb-40 relative">
-          <div className="grid lg:grid-cols-12 gap-8 items-end">
+        <div className="container pt-10 pb-14 sm:pt-16 sm:pb-20 lg:pt-32 lg:pb-40 relative">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-8 items-end">
             <div className="lg:col-span-7 rise">
-              <Badge className="mb-6 bg-[hsl(var(--lime))]/20 text-[hsl(var(--forest))] border-0 rounded-full px-4 py-1.5 hover:bg-[hsl(var(--lime))]/30">
+              <Badge className="mb-4 sm:mb-6 bg-[hsl(var(--lime))]/20 text-[hsl(var(--forest))] border-0 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 hover:bg-[hsl(var(--lime))]/30 text-xs sm:text-sm">
                 <span className="w-1.5 h-1.5 rounded-full bg-[hsl(var(--forest))] mr-2 animate-pulse" />
                 Сезон 2026 открыт
               </Badge>
-              <h1 className="font-display text-6xl lg:text-8xl leading-[0.95] tracking-tight text-balance">
+              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-8xl leading-[0.95] tracking-tight text-balance">
                 Семена, <br />
                 <em className="text-[hsl(var(--earth))]">
                   которые прорастают
                 </em>{" "}
                 <br />в урожай.
               </h1>
-              <p className="mt-8 text-lg text-muted-foreground max-w-xl">
+              <p className="mt-5 sm:mt-8 text-base sm:text-lg text-muted-foreground max-w-xl">
                 Оптовый поставщик семян овощных, цветочных и полевых культур.
                 Более 560 позиций, прямые контракты с селекционными станциями.
               </p>
@@ -152,45 +152,45 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
               className="lg:col-span-5 relative rise"
               style={{ animationDelay: "0.15s" }}
             >
-              <div className="aspect-[4/5] rounded-[2rem] overflow-hidden relative shadow-2xl">
+              <div className="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden relative shadow-2xl">
                 <img
                   src="https://cdn.poehali.dev/projects/6e30ca34-8fe1-4535-8d16-622fe38c58fb/files/a1c310be-a37a-41df-bcbd-1078909d16ec.jpg"
                   alt="Семена"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-6 left-6 right-6 bg-background/95 backdrop-blur rounded-2xl p-5">
-                  <div className="flex items-baseline justify-between">
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 bg-background/95 backdrop-blur rounded-xl sm:rounded-2xl p-3 sm:p-5">
+                  <div className="flex items-baseline justify-between gap-2">
                     <div>
-                      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
                         Ассортимент
                       </div>
-                      <div className="font-display text-4xl font-semibold">
+                      <div className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold">
                         560+
                       </div>
                     </div>
                     <div>
-                      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
                         Регионов
                       </div>
-                      <div className="font-display text-4xl font-semibold">
+                      <div className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold">
                         48
                       </div>
                     </div>
                     <div>
-                      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground">
                         Всхожесть
                       </div>
-                      <div className="font-display text-4xl font-semibold">
+                      <div className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold">
                         97%
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="absolute -top-6 -right-4 w-28 h-28 rounded-full bg-[hsl(var(--lime))] grid place-items-center rotate-12 shadow-xl">
+              <div className="absolute -top-4 -right-2 sm:-top-6 sm:-right-4 w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-[hsl(var(--lime))] grid place-items-center rotate-12 shadow-xl">
                 <div className="text-center leading-tight">
-                  <div className="font-display text-2xl font-bold">-15%</div>
-                  <div className="text-[10px] uppercase tracking-wider">
+                  <div className="font-display text-lg sm:text-2xl font-bold">-15%</div>
+                  <div className="text-[9px] sm:text-[10px] uppercase tracking-wider">
                     ранний опт
                   </div>
                 </div>
@@ -199,12 +199,12 @@ const HeaderHero = ({ active, scroll }: HeaderHeroProps) => {
           </div>
         </div>
 
-        <div className="border-y border-border/60 py-5 overflow-hidden bg-[hsl(var(--forest))] text-[hsl(var(--cream))]">
+        <div className="border-y border-border/60 py-3 sm:py-5 overflow-hidden bg-[hsl(var(--forest))] text-[hsl(var(--cream))]">
           <div className="flex marquee whitespace-nowrap">
             {[...Array(2)].map((_, i) => (
               <div
                 key={i}
-                className="flex items-center gap-12 pr-12 font-display text-3xl italic"
+                className="flex items-center gap-8 sm:gap-12 pr-8 sm:pr-12 font-display text-xl sm:text-2xl lg:text-3xl italic"
               >
                 <span>Подсолнечник</span>
                 <span>✿</span>

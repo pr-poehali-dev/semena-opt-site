@@ -67,35 +67,35 @@ const ContactsFooter = () => {
     <>
       <section
         id="contacts"
-        className="bg-[hsl(var(--forest))] text-[hsl(var(--cream))] py-24 lg:py-32"
+        className="bg-[hsl(var(--forest))] text-[hsl(var(--cream))] py-14 sm:py-20 lg:py-32"
       >
         <div className="container">
-          <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--lime))] mb-3">
+          <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--lime))] mb-2 sm:mb-3">
             06 — Связь
           </div>
-          <h2 className="font-display text-5xl lg:text-7xl mb-16 leading-[0.95]">
+          <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-7xl mb-10 sm:mb-16 leading-[0.95]">
             Позвоните — <em>подберём</em> <br />
             сорта под ваш регион.
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 mb-20">
-            <div className="border-t border-[hsl(var(--cream))]/20 pt-8">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-20">
+            <div className="border-t border-[hsl(var(--cream))]/20 pt-5 sm:pt-8">
               <Icon
                 name="Phone"
                 size={24}
-                className="text-[hsl(var(--lime))] mb-6"
+                className="text-[hsl(var(--lime))] mb-4 sm:mb-6"
               />
               <div className="text-xs uppercase tracking-wider opacity-60 mb-2">
                 Телефоны
               </div>
               <a
                 href="tel:+79206738383"
-                className="font-display text-2xl lg:text-3xl mb-1 block hover:text-[hsl(var(--lime))] transition-colors"
+                className="font-display text-xl sm:text-2xl lg:text-3xl mb-1 block hover:text-[hsl(var(--lime))] transition-colors"
               >
                 +7 (920) 673-83-83
               </a>
               <a
                 href="tel:+79203418866"
-                className="font-display text-2xl lg:text-3xl mb-2 block hover:text-[hsl(var(--lime))] transition-colors"
+                className="font-display text-xl sm:text-2xl lg:text-3xl mb-2 block hover:text-[hsl(var(--lime))] transition-colors"
               >
                 +7 (920) 341-88-66
               </a>
@@ -104,42 +104,42 @@ const ContactsFooter = () => {
               </div>
             </div>
 
-            <div className="border-t border-[hsl(var(--cream))]/20 pt-8">
+            <div className="border-t border-[hsl(var(--cream))]/20 pt-5 sm:pt-8">
               <Icon
                 name="Mail"
                 size={24}
-                className="text-[hsl(var(--lime))] mb-6"
+                className="text-[hsl(var(--lime))] mb-4 sm:mb-6"
               />
               <div className="text-xs uppercase tracking-wider opacity-60 mb-2">
                 Почта
               </div>
               <a
                 href="mailto:semena.37@mail.ru"
-                className="font-display text-2xl lg:text-3xl mb-1 block hover:text-[hsl(var(--lime))] transition-colors break-all"
+                className="font-display text-xl sm:text-2xl lg:text-3xl mb-1 block hover:text-[hsl(var(--lime))] transition-colors break-all"
               >
                 semena.37@mail.ru
               </a>
               <div className="text-sm opacity-70">Ответим в течение часа</div>
             </div>
 
-            <div className="border-t border-[hsl(var(--cream))]/20 pt-8">
+            <div className="border-t border-[hsl(var(--cream))]/20 pt-5 sm:pt-8 sm:col-span-2 md:col-span-1">
               <Icon
                 name="MapPin"
                 size={24}
-                className="text-[hsl(var(--lime))] mb-6"
+                className="text-[hsl(var(--lime))] mb-4 sm:mb-6"
               />
               <div className="text-xs uppercase tracking-wider opacity-60 mb-2">
                 Адрес
               </div>
-              <div className="font-display text-2xl lg:text-3xl mb-1">
+              <div className="font-display text-xl sm:text-2xl lg:text-3xl mb-1">
                 г. Иваново
               </div>
               <div className="text-sm opacity-70">ул. Зелёная, д. 19В</div>
             </div>
           </div>
 
-          <div className="mb-20">
-            <div className="rounded-3xl overflow-hidden border border-[hsl(var(--cream))]/20">
+          <div className="mb-12 sm:mb-20">
+            <div className="rounded-2xl sm:rounded-3xl overflow-hidden border border-[hsl(var(--cream))]/20">
               <iframe
                 title="Карта — г. Иваново, ул. Зелёная, д. 19В"
                 src="https://yandex.ru/map-widget/v1/?ll=40.948929%2C57.006451&mode=search&text=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2%D0%BE%20%D1%83%D0%BB.%20%D0%97%D0%B5%D0%BB%D1%91%D0%BD%D0%B0%D1%8F%2019%D0%92&z=16"
@@ -147,10 +147,10 @@ const ContactsFooter = () => {
                 height="440"
                 frameBorder="0"
                 allowFullScreen
-                className="block w-full"
+                className="block w-full h-[280px] sm:h-[380px] lg:h-[440px]"
               />
             </div>
-            <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
+            <div className="mt-4 sm:mt-5 flex flex-col sm:flex-row flex-wrap items-start sm:items-center sm:justify-between gap-3 sm:gap-4">
               <div className="text-sm opacity-70">
                 Приезжайте к нам на склад или закажите доставку в любой регион.
               </div>
@@ -158,10 +158,11 @@ const ContactsFooter = () => {
                 href="https://yandex.ru/maps/?rtext=~57.006451,40.948929&rtt=auto"
                 target="_blank"
                 rel="noopener noreferrer"
+                className="w-full sm:w-auto"
               >
                 <Button
                   size="lg"
-                  className="rounded-full bg-[hsl(var(--lime))] hover:bg-[hsl(var(--lime))]/90 text-[hsl(var(--forest))] h-14 px-8"
+                  className="w-full sm:w-auto rounded-full bg-[hsl(var(--lime))] hover:bg-[hsl(var(--lime))]/90 text-[hsl(var(--forest))] h-12 sm:h-14 px-6 sm:px-8"
                 >
                   <Icon name="Navigation" size={18} />
                   Построить маршрут
@@ -170,12 +171,12 @@ const ContactsFooter = () => {
             </div>
           </div>
 
-          <div className="grid lg:grid-cols-12 gap-10 items-start">
+          <div className="grid lg:grid-cols-12 gap-6 sm:gap-10 items-start">
             <div className="lg:col-span-5">
-              <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--lime))] mb-3">
+              <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--lime))] mb-2 sm:mb-3">
                 Оставить заявку
               </div>
-              <h3 className="font-display text-4xl lg:text-5xl leading-[1] mb-6">
+              <h3 className="font-display text-2xl sm:text-3xl lg:text-5xl leading-[1] mb-4 sm:mb-6">
                 Напишите нам — перезвоним в течение дня.
               </h3>
               <p className="text-sm opacity-70 max-w-sm">
@@ -185,9 +186,9 @@ const ContactsFooter = () => {
             </div>
             <form
               onSubmit={submitForm}
-              className="lg:col-span-7 bg-[hsl(var(--cream))] text-foreground rounded-3xl p-8 lg:p-10 space-y-5"
+              className="lg:col-span-7 bg-[hsl(var(--cream))] text-foreground rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 space-y-4 sm:space-y-5"
             >
-              <div className="grid md:grid-cols-2 gap-5">
+              <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
                 <div>
                   <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
                     Имя
@@ -262,7 +263,7 @@ const ContactsFooter = () => {
                   type="submit"
                   disabled={sending || !agree}
                   size="lg"
-                  className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8 shrink-0"
+                  className="w-full sm:w-auto rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-12 sm:h-14 px-6 sm:px-8 shrink-0"
                 >
                   {sending ? "Отправляем..." : "Отправить заявку"}
                   <Icon name="Send" size={16} />
@@ -273,9 +274,9 @@ const ContactsFooter = () => {
         </div>
       </section>
 
-      <footer className="container py-10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+      <footer className="container py-6 sm:py-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
         <div>© 2026 Семена Оптом. Все права защищены.</div>
-        <div className="flex flex-wrap gap-6 items-center">
+        <div className="flex flex-wrap gap-3 sm:gap-6 items-center">
           <span>ИНН 371118162441</span>
           <span className="hidden md:inline">·</span>
           <Link

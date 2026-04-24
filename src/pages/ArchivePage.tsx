@@ -52,7 +52,7 @@ const ArchivePage = () => {
               <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
                 {a.image ? (
                   <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden shrink-0 border border-border/60">
-                    <img src={a.image} alt={a.title} className="w-full h-full object-cover" />
+                    <img src={a.image} alt={a.title} loading="lazy" decoding="async" width={80} height={80} className="w-full h-full object-cover" />
                   </div>
                 ) : (
                   <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl shrink-0 bg-muted grid place-items-center">

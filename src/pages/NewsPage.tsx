@@ -127,7 +127,7 @@ const NewsPage = () => {
 
           {item.image && (
             <div className="aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-10">
-              <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+              <img src={item.image} alt={item.title} loading="eager" decoding="async" fetchPriority="high" width={1200} height={675} className="w-full h-full object-cover" />
             </div>
           )}
 
@@ -152,7 +152,7 @@ const NewsPage = () => {
                     onClick={() => setLightboxIdx(i)}
                     className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden group relative"
                   >
-                    <img src={img} alt={`${item.title} — фото ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <img src={img} alt={`${item.title} — фото ${i + 1}`} loading="lazy" decoding="async" width={400} height={400} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-[hsl(var(--forest))]/0 group-hover:bg-[hsl(var(--forest))]/30 transition-colors grid place-items-center">
                       <Icon name="Maximize2" size={24} className="text-[hsl(var(--cream))] opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>

@@ -19,6 +19,7 @@ import {
 } from './data';
 import { faqCategories } from './faq';
 import AdaptiveImage from './AdaptiveImage';
+import { reachGoal, Goals } from '@/lib/metrika';
 
 interface NewsApi { id?: number; slug: string; date: string; tag: string; title: string; text: string; content?: string[]; image?: string }
 interface CatalogApi { id?: number; name: string; count: number; img: string; items: string[] }
@@ -66,6 +67,7 @@ const ContentSections = () => {
       return;
     }
     setSending(true);
+    reachGoal(Goals.PriceRequestSubmit, { source: 'catalog', category: selectedCategory.name });
     try {
       const res = await fetch(CONTACT_API_URL, {
         method: 'POST',
@@ -77,6 +79,7 @@ const ContentSections = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Ошибка отправки');
+      reachGoal(Goals.PriceRequestSuccess, { source: 'catalog', category: selectedCategory.name });
       toast({ title: 'Заявка отправлена', description: 'Пришлём прайс-лист и свяжемся с вами в ближайшее время.' });
       closeDialog();
     } catch (err) {
@@ -229,13 +232,17 @@ const ContentSections = () => {
                 {!showForm ? (
                   <div className="flex flex-col sm:flex-row gap-3 pt-1">
                     <Button
-                      onClick={() => setShowForm(true)}
+                      onClick={() => { reachGoal(Goals.PriceRequestOpen, { source: 'catalog', category: selectedCategory.name }); setShowForm(true); }}
                       className="flex-1 rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-12"
                     >
                       <Icon name="FileText" size={16} />
                       Запросить прайс-лист
                     </Button>
-                    <a href="tel:+79206738383" className="flex-1">
+                    <a
+                      href="tel:+79206738383"
+                      onClick={() => reachGoal(Goals.PhoneClick, { phone: '+79206738383', source: 'catalog_dialog' })}
+                      className="flex-1"
+                    >
                       <Button variant="outline" className="w-full rounded-full h-12 border-foreground/20">
                         <Icon name="Phone" size={16} />
                         Связаться с менеджером

@@ -12,6 +12,7 @@ import { news as newsFallback, NEWS_API_URL, CONTACT_API_URL } from '@/component
 import SiteLogo from '@/components/site/SiteLogo';
 import AdaptiveImage from '@/components/site/AdaptiveImage';
 import useDocumentMeta from '@/hooks/useDocumentMeta';
+import { reachGoal, Goals } from '@/lib/metrika';
 
 interface NewsItem { slug: string; date: string; tag: string; title: string; text: string; content?: string[]; image?: string; images?: string[] }
 
@@ -90,6 +91,7 @@ const NewsPage = () => {
       return;
     }
     setSending(true);
+    reachGoal(Goals.PriceRequestSubmit, { source: 'news_page', news: item.title });
     try {
       const res = await fetch(CONTACT_API_URL, {
         method: 'POST',
@@ -101,6 +103,7 @@ const NewsPage = () => {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Ошибка отправки');
+      reachGoal(Goals.PriceRequestSuccess, { source: 'news_page', news: item.title });
       toast({ title: 'Заявка отправлена', description: 'Пришлём прайс-лист и свяжемся в ближайшее время.' });
       closeRequest();
     } catch (err) {
@@ -211,7 +214,7 @@ const NewsPage = () => {
             </div>
             <Button
               size="lg"
-              onClick={() => setRequestOpen(true)}
+              onClick={() => { reachGoal(Goals.PriceRequestOpen, { source: 'news_page', news: item.title }); setRequestOpen(true); }}
               className="w-full sm:w-auto rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-12 sm:h-14 px-6 sm:px-8"
             >
               Оставить заявку

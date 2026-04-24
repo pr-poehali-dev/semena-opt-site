@@ -87,7 +87,7 @@ const ContentSections = () => {
 
   return (
     <>
-      <section id="news" className="container py-14 sm:py-20 lg:py-32">
+      <section id="news" className="container py-14 sm:py-20 lg:py-32 scroll-mt-20 sm:scroll-mt-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 sm:mb-12">
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-2 sm:mb-3">01 — Новости</div>
@@ -135,7 +135,7 @@ const ContentSections = () => {
         </div>
       </section>
 
-      <section id="catalog" className="bg-[hsl(var(--forest))] text-[hsl(var(--cream))] py-14 sm:py-20 lg:py-32 rounded-t-[2rem] sm:rounded-t-[3rem]">
+      <section id="catalog" className="bg-[hsl(var(--forest))] text-[hsl(var(--cream))] py-14 sm:py-20 lg:py-32 rounded-t-[2rem] sm:rounded-t-[3rem] scroll-mt-20 sm:scroll-mt-24">
         <div className="container">
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 sm:mb-12">
             <div>
@@ -266,7 +266,7 @@ const ContentSections = () => {
         </DialogContent>
       </Dialog>
 
-      <section id="materials" className="container py-14 sm:py-20 lg:py-32">
+      <section id="faq" className="container py-14 sm:py-20 lg:py-32 scroll-mt-20 sm:scroll-mt-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 sm:mb-12">
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-2 sm:mb-3">04 — FAQ</div>
@@ -306,7 +306,7 @@ const ContentSections = () => {
         </div>
       </section>
 
-      <section id="partners" className="container pb-14 sm:pb-20 lg:pb-32">
+      <section id="partners" className="container pb-14 sm:pb-20 lg:pb-32 scroll-mt-20 sm:scroll-mt-24">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8 sm:mb-12">
           <div>
             <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-2 sm:mb-3">05 — Партнёрство</div>
@@ -332,7 +332,7 @@ const ContentSections = () => {
         </div>
       </section>
 
-      <section id="about" className="container pb-14 sm:pb-20 lg:pb-32">
+      <section id="about" className="container pb-14 sm:pb-20 lg:pb-32 scroll-mt-20 sm:scroll-mt-24">
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           <div className="aspect-[4/5] sm:aspect-[5/4] lg:aspect-[4/5] rounded-2xl sm:rounded-[2rem] overflow-hidden">
             <img src="https://cdn.poehali.dev/projects/6e30ca34-8fe1-4535-8d16-622fe38c58fb/files/576adcb1-4f20-4559-a90a-4201de6ac62a.jpg" alt="Склад" loading="lazy" decoding="async" width={800} height={1000} className="w-full h-full object-cover" />

@@ -6,7 +6,7 @@ export const CATALOG_API_URL = 'https://functions.poehali.dev/9eabe422-fd0a-4167
 export const nav = [
   { id: 'news', label: 'Новости' },
   { id: 'catalog', label: 'Каталог' },
-  { id: 'materials', label: 'Вопросы-ответы' },
+  { id: 'faq', label: 'Вопросы-ответы' },
   { id: 'partners', label: 'Партнёры' },
   { id: 'about', label: 'О магазине' },
   { id: 'contacts', label: 'Контакты' },

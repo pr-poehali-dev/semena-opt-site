@@ -67,7 +67,7 @@ const ContactsFooter = () => {
     <>
       <section
         id="contacts"
-        className="bg-[hsl(var(--forest))] text-[hsl(var(--cream))] py-14 sm:py-20 lg:py-32"
+        className="bg-[hsl(var(--forest))] text-[hsl(var(--cream))] py-14 sm:py-20 lg:py-32 scroll-mt-20 sm:scroll-mt-24"
       >
         <div className="container">
           <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--lime))] mb-2 sm:mb-3">

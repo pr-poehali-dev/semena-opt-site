@@ -4,10 +4,25 @@ import HeaderHero from '@/components/site/HeaderHero';
 import ContentSections from '@/components/site/ContentSections';
 import ContactsFooter from '@/components/site/ContactsFooter';
 import { nav } from '@/components/site/data';
+import useDocumentMeta from '@/hooks/useDocumentMeta';
 
 const Index = () => {
   const [active, setActive] = useState('news');
   const lockUntilRef = useRef(0);
+
+  useDocumentMeta({
+    title: '',
+    description: 'Оптовый магазин семян в Иваново: овощные, цветочные и полевые культуры. Более 560 сортов, прямые контракты с селекционными станциями, всхожесть 97%. Доставка по России. Заявки на сезон 2026.',
+    ogType: 'website',
+    jsonLdId: 'home-breadcrumb-jsonld',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Главная', item: 'https://semena37.ru/' },
+      ],
+    },
+  });
 
   const scroll = (id: string) => {
     setActive(id);

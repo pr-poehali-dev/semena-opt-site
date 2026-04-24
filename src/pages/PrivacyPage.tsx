@@ -2,8 +2,16 @@ import { Link } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
 import SiteLogo from '@/components/site/SiteLogo';
+import useDocumentMeta from '@/hooks/useDocumentMeta';
 
 const PrivacyPage = () => {
+  useDocumentMeta({
+    title: 'Политика конфиденциальности',
+    description: 'Политика в отношении обработки персональных данных магазина «Семена Оптом». Условия сбора, хранения и использования данных пользователей.',
+    robots: 'noindex, follow',
+    ogType: 'website',
+  });
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/60">

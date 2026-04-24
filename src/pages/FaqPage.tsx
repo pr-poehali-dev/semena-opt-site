@@ -6,10 +6,33 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { faqCategories, faqIntro } from '@/components/site/faq';
 import SiteLogo from '@/components/site/SiteLogo';
+import useDocumentMeta from '@/hooks/useDocumentMeta';
 
 const FaqPage = () => {
   const [active, setActive] = useState(faqCategories[0].id);
   const current = faqCategories.find((c) => c.id === active) ?? faqCategories[0];
+
+  const allFaqItems = faqCategories.flatMap((c) => c.items);
+
+  useDocumentMeta({
+    title: 'Вопросы и ответы',
+    description: 'Ответы на частые вопросы об оптовом заказе семян: условия доставки, сроки, оплата, подбор сортов под регион. Огурцы, томаты, зелень и другие культуры.',
+    ogType: 'website',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      inLanguage: 'ru-RU',
+      mainEntity: allFaqItems.map((it) => ({
+        '@type': 'Question',
+        name: it.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: it.a,
+        },
+      })),
+    },
+    jsonLdId: 'faq-page-jsonld',
+  });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -25,7 +48,7 @@ const FaqPage = () => {
         </div>
       </header>
 
-      <section className="container py-12 sm:py-20 lg:py-28">
+      <main className="container py-12 sm:py-20 lg:py-28">
         <div className="mb-8 sm:mb-12 max-w-3xl">
           <Badge className="mb-4 sm:mb-6 bg-[hsl(var(--lime))]/20 text-[hsl(var(--forest))] border-0 rounded-full px-3 sm:px-4 py-1 sm:py-1.5 hover:bg-[hsl(var(--lime))]/30 text-xs sm:text-sm">
             FAQ
@@ -117,7 +140,7 @@ const FaqPage = () => {
             </Card>
           </div>
         </div>
-      </section>
+      </main>
     </div>
   );
 };

@@ -68,7 +68,7 @@ function setJsonLd(id: string, data: Record<string, unknown> | null) {
 
 export function useDocumentMeta(meta: Meta) {
   useEffect(() => {
-    const title = meta.title ? `${meta.title} — Семена Оптом` : DEFAULT_TITLE;
+    const title = meta.title && meta.title.trim() ? `${meta.title} — Семена Оптом` : DEFAULT_TITLE;
     document.title = title;
 
     const description = meta.description || DEFAULT_DESCRIPTION;

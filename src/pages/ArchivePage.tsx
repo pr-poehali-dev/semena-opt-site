@@ -20,24 +20,24 @@ const ArchivePage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/60">
-        <div className="container flex items-center justify-between h-16">
+        <div className="container flex items-center justify-between h-14 sm:h-16 gap-3">
           <SiteLogo to="/" />
           <Link to="/">
-            <Button variant="outline" className="rounded-full">
+            <Button variant="outline" className="rounded-full h-9 sm:h-10 px-3 sm:px-4 text-sm">
               <Icon name="ArrowLeft" size={16} />
-              На главную
+              <span className="hidden sm:inline">На главную</span>
             </Button>
           </Link>
         </div>
       </header>
 
-      <section className="container py-24 lg:py-32">
-        <div className="mb-12">
-          <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-3">Архив</div>
-          <h1 className="font-display text-5xl lg:text-7xl leading-[0.95]">
+      <section className="container py-12 sm:py-20 lg:py-32">
+        <div className="mb-8 sm:mb-12">
+          <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-2 sm:mb-3">Архив</div>
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl leading-[0.95]">
             Архив <em className="text-[hsl(var(--earth))]">новостей</em>
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-xl">
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-muted-foreground max-w-xl">
             Все прошлые поступления, события и обновления компании. Новые записи появляются еженедельно.
           </p>
         </div>
@@ -47,21 +47,21 @@ const ArchivePage = () => {
             <Link
               key={i}
               to={`/archive/${a.slug}`}
-              className="flex items-center justify-between gap-6 py-5 group cursor-pointer hover:pl-4 transition-all"
+              className="flex items-center justify-between gap-3 sm:gap-6 py-4 sm:py-5 group cursor-pointer sm:hover:pl-4 transition-all"
             >
-              <div className="flex items-center gap-6 min-w-0 flex-1">
+              <div className="flex items-center gap-3 sm:gap-6 min-w-0 flex-1">
                 {a.image ? (
-                  <div className="w-20 h-20 rounded-2xl overflow-hidden shrink-0 border border-border/60">
+                  <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl overflow-hidden shrink-0 border border-border/60">
                     <img src={a.image} alt={a.title} className="w-full h-full object-cover" />
                   </div>
                 ) : (
-                  <div className="w-20 h-20 rounded-2xl shrink-0 bg-muted grid place-items-center">
-                    <Icon name="FileText" size={24} className="text-muted-foreground" />
+                  <div className="w-14 h-14 sm:w-20 sm:h-20 rounded-xl sm:rounded-2xl shrink-0 bg-muted grid place-items-center">
+                    <Icon name="FileText" size={22} className="text-muted-foreground" />
                   </div>
                 )}
                 <div className="min-w-0">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">{a.date}</div>
-                  <div className="font-display text-xl leading-tight truncate">{a.title}</div>
+                  <div className="text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground mb-0.5 sm:mb-1">{a.date}</div>
+                  <div className="font-display text-base sm:text-xl leading-tight line-clamp-2 sm:truncate">{a.title}</div>
                 </div>
               </div>
               <Icon name="ArrowUpRight" size={18} className="opacity-40 group-hover:opacity-100 transition-opacity shrink-0" />

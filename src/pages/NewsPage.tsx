@@ -88,69 +88,69 @@ const NewsPage = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-50 backdrop-blur-md bg-background/80 border-b border-border/60">
-        <div className="container flex items-center justify-between h-16">
+        <div className="container flex items-center justify-between h-14 sm:h-16 gap-3">
           <SiteLogo to="/" />
           <Link to="/">
-            <Button variant="outline" className="rounded-full">
+            <Button variant="outline" className="rounded-full h-9 sm:h-10 px-3 sm:px-4 text-sm">
               <Icon name="ArrowLeft" size={16} />
-              На главную
+              <span className="hidden sm:inline">На главную</span>
             </Button>
           </Link>
         </div>
       </header>
 
       {!item ? (
-        <section className="container py-24 lg:py-32 text-center">
-          <h1 className="font-display text-4xl lg:text-5xl mb-6">Новость не найдена</h1>
-          <p className="text-muted-foreground mb-8">Возможно, запись была удалена или перемещена в архив.</p>
+        <section className="container py-16 sm:py-24 lg:py-32 text-center">
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl mb-4 sm:mb-6">Новость не найдена</h1>
+          <p className="text-muted-foreground mb-6 sm:mb-8">Возможно, запись была удалена или перемещена в архив.</p>
           <Link to="/">
-            <Button size="lg" className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8">
+            <Button size="lg" className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-12 sm:h-14 px-6 sm:px-8">
               Вернуться на главную
             </Button>
           </Link>
         </section>
       ) : (
-        <article className="container py-16 lg:py-24 max-w-3xl">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-10 transition-colors">
+        <article className="container py-10 sm:py-16 lg:py-24 max-w-3xl">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 sm:mb-10 transition-colors">
             <Icon name="ArrowLeft" size={16} />
             Ко всем новостям
           </Link>
 
-          <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
             <Badge className={`rounded-full border-0 ${item.tag === 'Поступление' ? 'bg-[hsl(var(--lime))]/30 text-[hsl(var(--forest))]' : 'bg-[hsl(var(--earth))]/20 text-[hsl(var(--earth))]'}`}>
               {item.tag}
             </Badge>
             <span className="text-xs uppercase tracking-wider text-muted-foreground">{item.date}</span>
           </div>
 
-          <h1 className="font-display text-4xl lg:text-6xl leading-[1] mb-8">{item.title}</h1>
+          <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl leading-[1.05] lg:leading-[1] mb-6 sm:mb-8">{item.title}</h1>
 
           {item.image && (
-            <div className="aspect-[16/9] rounded-3xl overflow-hidden mb-10">
+            <div className="aspect-[16/9] rounded-2xl sm:rounded-3xl overflow-hidden mb-6 sm:mb-10">
               <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
             </div>
           )}
 
-          <p className="text-xl text-muted-foreground leading-relaxed mb-10 border-l-4 border-[hsl(var(--earth))] pl-6">
+          <p className="text-base sm:text-lg lg:text-xl text-muted-foreground leading-relaxed mb-6 sm:mb-10 border-l-4 border-[hsl(var(--earth))] pl-4 sm:pl-6">
             {item.text}
           </p>
 
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {item.content?.map((p, i) => (
-              <p key={i} className="text-lg leading-relaxed">{p}</p>
+              <p key={i} className="text-base sm:text-lg leading-relaxed">{p}</p>
             ))}
           </div>
 
           {gallery.length > 0 && (
-            <div className="mt-12">
-              <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-4">Фотогалерея</div>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="mt-8 sm:mt-12">
+              <div className="text-xs uppercase tracking-[0.25em] text-[hsl(var(--earth))] mb-3 sm:mb-4">Фотогалерея</div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                 {gallery.map((img, i) => (
                   <button
                     key={i}
                     type="button"
                     onClick={() => setLightboxIdx(i)}
-                    className="aspect-square rounded-2xl overflow-hidden group relative"
+                    className="aspect-square rounded-xl sm:rounded-2xl overflow-hidden group relative"
                   >
                     <img src={img} alt={`${item.title} — фото ${i + 1}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-[hsl(var(--forest))]/0 group-hover:bg-[hsl(var(--forest))]/30 transition-colors grid place-items-center">
@@ -162,15 +162,15 @@ const NewsPage = () => {
             </div>
           )}
 
-          <div className="mt-16 pt-10 border-t border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="mt-10 sm:mt-16 pt-6 sm:pt-10 border-t border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
               <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Остались вопросы?</div>
-              <div className="font-display text-2xl">Запросите прайс-лист</div>
+              <div className="font-display text-xl sm:text-2xl">Запросите прайс-лист</div>
             </div>
             <Button
               size="lg"
               onClick={() => setRequestOpen(true)}
-              className="rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-14 px-8"
+              className="w-full sm:w-auto rounded-full bg-[hsl(var(--forest))] hover:bg-[hsl(var(--forest))]/90 text-[hsl(var(--cream))] h-12 sm:h-14 px-6 sm:px-8"
             >
               Оставить заявку
               <Icon name="ArrowRight" size={18} />
@@ -180,9 +180,9 @@ const NewsPage = () => {
       )}
 
       <Dialog open={requestOpen} onOpenChange={(o) => { if (!o) closeRequest(); }}>
-        <DialogContent className="rounded-3xl max-w-md">
+        <DialogContent className="rounded-2xl sm:rounded-3xl w-[calc(100vw-1.5rem)] max-w-md p-5 sm:p-6">
           <DialogHeader>
-            <DialogTitle className="font-display text-3xl">Запрос прайс-листа</DialogTitle>
+            <DialogTitle className="font-display text-2xl sm:text-3xl">Запрос прайс-листа</DialogTitle>
           </DialogHeader>
           <form onSubmit={submitRequest} className="space-y-3 pt-2">
             <div>
